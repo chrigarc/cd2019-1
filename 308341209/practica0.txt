@@ -1,0 +1,21 @@
+crear cuenta e instalar git
+
+https://github.com//chrigarc/cd2019-1
+Hacer fork desde la pagina
+clonar - git clonegit@github.com:[usuario]/cd2019-1.git
+hacer branch
+- git checkout -b nombre_rama
+agregar el repositorio de Chris como upstream
+- git remote add upstream git@github.com:chrigarc/cd2019-1.git
+Hacer pull (actualizar) upstream
+git pull upstream master
+- crear carpeta con numero de cuenta unam
+- meter las notas de la pracctica 0
+- agregar cambios
+git add
+- indicar carga de información o commit
+git commit -m "mensaje"
+- realizar la carga o hacer push
+git push origin "rama"
+- desde la pagina solicitar pull request
+git@github.com:chrigarc/cd2019-1.git
