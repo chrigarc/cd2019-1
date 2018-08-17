@@ -1,0 +1,8 @@
+Prueba para conectarse a git
+
+se clono el repositorio
+se creó una rama y nos cambiamos a esta misma
+añadimos al upstream
+hicimos pull para hacer la carga
+añadimos todo y lo comentamos
+hacemos push en la rama para subirlo
