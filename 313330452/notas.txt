@@ -1,0 +1,9 @@
+En ésta sesión:
+1. Los que no tenían una cuenta en github hicieron una
+2. Hicimos Fork y Clonamos un repositorio
+3. Editamos desde terminal un repositorio
+4. Cambiamos y creamos una rama nueva
+5. Agregamos notas de clase en una carpeta con nuestro
+	número de cuenta
+6. Hicimos commit hacia el proyecto en github
+7. Pedimos un pull desde la página del proyecto original
