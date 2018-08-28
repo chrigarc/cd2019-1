@@ -3,13 +3,13 @@ https://github.com/chrigarc/cd2019-1
 
 Hacer fork - Desde la pagina
 Instalar git
-Clonar 
+Clonar
 - git clone git@github.com:[SU USUARIO]/cd2019-1.git
 Hacer un branch
 - git checkout -b NOMBRE_RAMA
 Agregar el repositorio de Chris como upstream
-- git remote add upstream 
-https://github.com/chrigarc/ComputacionDistribuida20151.git
+- git remote add upstream
+https://github.com/chrigarc/cd2019-1.git
 Hacer un pull (actualizar) de upstream
 git pull upstream master
 - Crear una carpeta con su numero de cuenta

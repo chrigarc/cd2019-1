@@ -1,0 +1,20 @@
+Hacer Fork desde la página:
+https://github.com/chigarc/cd2019-1
+
+Instalar git
+Clonar
+- git clone git@github.com[USUARIO]/cd2019-1.git
+Entrar a la carpeta 
+- cd /DIRECCIÓN_CARPETA/
+Hacer un branch
+- git checkout -b NOMBRE_RAMA
+Agregar el repositorio como upstream 
+-git remote add upstream git@github.com:chrigarc/cd2019-1
+Hacer un pull de upstream
+-git pull upstream master
+Crear carpeta con número de cuenta
+Meter las notas de la práctica 0
+Agregar los cambios
+-git add.
+Indicar la carga de información o commit
+-git commit -m "mensaje"
