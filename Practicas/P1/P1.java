@@ -42,6 +42,28 @@ public class P1{
 	        gen.nextEvents();
 	    gen.end();
 	    graph.display();
+
+	    for(Node n:graph) {
+        System.out.println(n.getDegree());
+        if(n.getDegree()==0){
+        	n.addAttribute("ui.style", "fill-color: rgb(255,0,255);");
+
+        }
+        if(n.getDegree()==1){
+        	n.addAttribute("ui.style", "fill-color: rgb(0,0,255);");
+        }
+        if(n.getDegree()==2){
+        	n.addAttribute("ui.style", "fill-color: rgb(255,0,0);");
+        }
+                if(n.getDegree()==3){
+        	n.addAttribute("ui.style", "fill-color: rgb(0,255,0);");
+        }
+                if(n.getDegree()>3){
+        	n.addAttribute("ui.style", "fill-color: rgb(255,255,0);");
+        }
+
+
+    }
 	}
 	
 }
