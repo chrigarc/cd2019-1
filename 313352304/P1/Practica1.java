@@ -23,7 +23,7 @@ public class Practica1 {
         g.addEdge("amarillo-aux1", "amarillo", "aux1");
         g.addEdge("azul-aux1", "azul", "aux1");
 
-        g.addAttribute("ui.stylesheet", "url:(./stylesheet.css)");
+        g.addAttribute("ui.stylesheet", "url:(./css/stylesheet1.css)");
 
         g.display();
 

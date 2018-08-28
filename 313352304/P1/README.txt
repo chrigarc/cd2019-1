@@ -2,10 +2,11 @@ México D.F., a 21 de Agosto de 2018.
 
 Computacion Distribuida:
 
-Alumno: HURTADO GUTIERREZ MARCO ANTONIO  No.cuenta: 313110902
+
+Alumno: BERNAL MARTINEZ FERNANDO  No.cuenta: 313352304
 	equipo: 
 	MARTINEZ LOPEZ ALAN ALEXIS
-	BERNAL MARTINEZ FERNANDO
+	HURTADO GUTIERREZ MARCO ANTONIO
 	FLORES LOPEZ ANA BERTHA
  
 Universidad Nacional Autónoma de México.
