@@ -59,7 +59,7 @@ public class P1{
         	n.addAttribute("ui.style", "fill-color: rgb(0,255,0);");
         }
                 if(n.getDegree()>3){
-        	n.addAttribute("ui.style", "fill-color: rgb(255,255,0);");
+        	n.addAttribute("ui.style", "fill-color: rgb(255,0,0);");
         }
 
 
