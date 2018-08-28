@@ -1,6 +1,6 @@
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.SingleGraph;
-    ww
+    
 
 public class P1{
 
