@@ -9,3 +9,5 @@
 **/nbproject
 **/nbproject/*
 **/.DS_Store
+**/build
+**/build/*
