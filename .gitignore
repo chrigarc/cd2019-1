@@ -3,3 +3,4 @@
 **/*~
 **/*.jar.asc
 **/*.pom.asc
+**/lib
