@@ -1,4 +1,5 @@
 import org.graphstream.graph.Node;
+import org.graphstream.graph.Edge;
 import java.util.Iterator;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -26,16 +27,19 @@ public class CDNode extends JLabel implements Runnable{
   }
 
   public void run(){
-    for (egde : node.getEachEdge()) {
+    for (Edge edge : node.getEachEdge()) {
       Node nodo_ = edge.getOpposite(node);
       transport.put(new Message("0"), nodo_.getId());
     }
 
     Message m = transport.pop(node.getId());
 
+    if (m == null)
+      return;
+
     if (m.tiempoVida()>0) {
       m.reduceTiempo();
-      for (egde : node.getEachEdge()) {
+      for (Edge edge : node.getEachEdge()) {
         Node nodo_ = edge.getOpposite(node);
         transport.put(m, nodo_.getId());
       }

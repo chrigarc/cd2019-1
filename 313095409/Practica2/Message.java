@@ -4,7 +4,7 @@ La clase es una estructura de datos con un tiempo de vida 100, que conoce el id 
 public class Message{
 
   private String source;
-  private Int tiempoVida;
+  private int tiempoVida;
 
   public Message(String source){
     this.source = source;
@@ -12,11 +12,11 @@ public class Message{
   }
 
   public String source(){
-    return source
+    return source;
   }
 
-  public Int tiempoVida(){
-    return tiempoVida
+  public int tiempoVida(){
+    return tiempoVida;
   }
 
   public void reduceTiempo(){

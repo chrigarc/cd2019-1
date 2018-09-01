@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public class Transport{
 
-  private static LinkedList<Tuple<Message,String>> registro;
+  public static LinkedList<Tuple<Message,String>> registro;
 
   private static Transport transport;
 
@@ -31,25 +31,26 @@ public class Transport{
   }
 
   public static Transport getInstance(){
-  	if(transport == null)
+  	if(transport == null) {
       transport = new Transport();
       registro = new LinkedList<Tuple<Message,String>>();
-
+    }
       return transport;
   }
 
   public boolean put(Message m, String destinationNodeId){
     sleep(200);
-    resgistro.add(new Tuple(m, destinationNodeId));
+    registro.add(new Tuple(m, destinationNodeId));
 	  return false;
   }
 
   public Message pop(String nodeId){
 	  sleep(300);
-    for (tupla : registro) {
+    for (Tuple<Message,String> tupla : registro) {
       if (tupla.y == nodeId)
-        return tupla.x
+        return tupla.x;
     }
+
 	  return null;
   }
 
