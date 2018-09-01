@@ -27,21 +27,24 @@ public class CDNode extends JLabel implements Runnable{
   }
 
   public void run(){
-    for (Edge edge : node.getEachEdge()) {
-      Node nodo_ = edge.getOpposite(node);
-      transport.put(new Message("0"), nodo_.getId());
-    }
-
-    Message m = transport.pop(node.getId());
-
-    if (m == null)
-      return;
-
-    if (m.tiempoVida()>0) {
-      m.reduceTiempo();
+    while (activo) {
       for (Edge edge : node.getEachEdge()) {
         Node nodo_ = edge.getOpposite(node);
-        transport.put(m, nodo_.getId());
+        while(!sendMessage(new Message("0"), nodo_.getId())){sleep(500);}
+      }
+
+      sleep(500);
+      Message m = readMessage();
+      sleep(500);
+      if (m == null)
+      continue;
+
+      if (m.tiempoVida()>0) {
+        m.reduceTiempo();
+        for (Edge edge : node.getEachEdge()) {
+          Node nodo_ = edge.getOpposite(node);
+          while(!sendMessage(m, nodo_.getId())){sleep(500);}
+        }
       }
     }
   }

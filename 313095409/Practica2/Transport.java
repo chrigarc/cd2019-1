@@ -40,18 +40,25 @@ public class Transport{
 
   public boolean put(Message m, String destinationNodeId){
     sleep(200);
-    registro.add(new Tuple(m, destinationNodeId));
-	  return false;
+    try{
+      registro.add(new Tuple(m, destinationNodeId));
+    } catch (Exception e) {
+      return false;
+    }
+    return true;
   }
 
   public Message pop(String nodeId){
 	  sleep(300);
-    for (Tuple<Message,String> tupla : registro) {
-      if (tupla.y == nodeId)
+    try {
+      for (Tuple<Message,String> tupla : registro) {
+        if (tupla.y == nodeId)
         return tupla.x;
+      }
+    } catch (Exception e) {
+      return null;
     }
-
-	  return null;
+    return null;
   }
 
   private void sleep(int ms){

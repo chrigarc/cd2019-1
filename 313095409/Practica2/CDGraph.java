@@ -113,6 +113,6 @@ public class CDGraph implements Runnable{
   }
 
   private void stopAction(){
-	   graph.clear();
+	   stop();
   }
 }
