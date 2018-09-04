@@ -52,8 +52,10 @@ public class CDNode extends JLabel implements Runnable{
                     Node n = nNeigh.next();
                     Message reenvio = m.clone();
                     reenvio.setDestination(n.getId());
-                    reenvio.setTTL(m.getTTL()-1);
-                    this.sendMessage(reenvio);
+                    if(m.getTTL()>0){
+                      reenvio.setTTL(m.getTTL()-1);
+                      this.sendMessage(reenvio);
+                    }
                 }
             }
             sleep(100);
