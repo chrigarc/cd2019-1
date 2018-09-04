@@ -1,12 +1,21 @@
 # Práctica 2 - Broadcast
 
+##Integrantes:
+Miguel Andres Guevara Castro 314091057
+
+Erick Gonzalez Duran 314271103
+
+Ángeles Martínez Ángela Janín  314201009
+
+RIvas León Alexis 314215323
+
 ### Objetivo
 Realizar simulaciones de envio por broadcast en una red de nodos 
 
 ### Marco teórico
 En Informática, la difusión amplia, difusión ancha o broadcast, es una forma de transmisión de información donde un nodo emisor envía información a una multitud de nodos receptores de manera simultánea, sin necesidad de reproducir la misma transmisión nodo por nodo. 
 
-### Material
+### Archivos
 - CDNode.java
 - CDGraph.java
 - Message.java
