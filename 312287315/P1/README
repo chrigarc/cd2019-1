@@ -1,0 +1,10 @@
+Equipo:
+Becerra Ruiz Brenda Margarita: 312232140
+Tello Ruiz Claudia: 312287315
+
+El programa abre dos ventanas, una con una gráfica de 5 nodos para el ejercicio 1 y la otra una con una gráfica de 10 nodos aleatoria para el ejercicio 2
+
+para compilar:
+javac -cp .:../lib/gs-core-1.3.jar P1.java
+para ejecutar:
+java -cp .:../lib/gs-core-1.3.jar P1
