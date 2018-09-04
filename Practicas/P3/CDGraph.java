@@ -23,6 +23,8 @@ public class CDGraph extends Thread{
     private ConcurrentLinkedDeque<String[]> list;
     private boolean active;
     private JFrame frame;
+    private String source;
+    private String destination;
 
     public CDGraph(Graph g){
         this.graph = g;
@@ -31,11 +33,26 @@ public class CDGraph extends Thread{
         this.active = true;
     }
 
+    public void setSource(String source){
+        this.source = source;
+    }
+
+    public void setDestination(String destination){
+        this.destination = destination;
+    }
+
     public void run(){
         graph.display();
         for( Node i : graph.getEachNode() ){
             i.addAttribute("ui.label", i.getId());
-            CDNode cdn = new CDNode(this, i);
+            CDNode cdn = null;
+                cdn = new CDNode(this, i, CDNode.Type.SOURCE);
+                if(i.getId().equals(source)){
+            }else if(i.getId().equals(destination)){
+                cdn = new CDNode(this, i, CDNode.Type.DESTINATION);
+            }else{
+                cdn = new CDNode(this, i);
+            }
             new Thread(cdn).start();
             nodes.add(cdn);
         }
@@ -54,7 +71,7 @@ public class CDGraph extends Thread{
     }
 
     private void createFrame(){
-        frame = new JFrame("Práctica 2");
+        frame = new JFrame("Práctica 3");
         frame.setSize(800, 800);
         frame.setLocationRelativeTo(null);                       // centramos la ventana en la pantalla
 
@@ -129,15 +146,21 @@ public class CDGraph extends Thread{
             System.out.println("Finalizando cambios en la grafica espere...");
             sleep(1000);
         }
-        iterator = nodes.iterator();
-        while(iterator.hasNext()){
-            CDNode tmp = iterator.next();
-            System.out.print("Node " + tmp.getNode().getId() + ": ");
-            System.out.println(tmp.getMessages());
-        }
+        renderComputacionesEquivalentes();
     }
 
     private void stopAction(){
         this.stopAll();
+    }
+
+    /**
+    *  Termina el metedo para localizar todas las computaciones equivalentes
+    *  Las computaciones equivalentes que tienen que encontrar de ley son [A, B, E, F, D] y [A, E, B, F, D]
+    */
+    private void renderComputacionesEquivalentes(){
+        Graph equivalentes = null;
+        if(equivalentes != null){
+            equivalentes.display();
+        }
     }
 }
