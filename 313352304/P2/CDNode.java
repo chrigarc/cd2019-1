@@ -1,46 +1,68 @@
+
 import org.graphstream.graph.Node;
 import java.util.Iterator;
 import javax.swing.JLabel;
 import java.awt.Color;
+import java.util.LinkedList;
 
 public class CDNode extends JLabel implements Runnable{
 
     public static final String COLOR_DEFAULT = "blue";
     public static final String COLOR_SEND = "red";
     public static final String COLOR_READ = "green";
-    
-    
+
+
     private Node node;
     private boolean activo;
     private Transport transport;
     private CDGraph graph;
+    private LinkedList<Message> recibidos;
 
 
     public CDNode(CDGraph g,Node n){
-	super();
-	this.node = n;
-	this.activo = true;
-	transport = Transport.getInstance();
-	this.graph = g;
-	this.setFillColor(COLOR_DEFAULT);
-    }
-
-    public void run(){	
+        super();
+        this.node = n;
+        this.activo = true;
+        transport = Transport.getInstance();
+        this.graph = g;
+        this.setFillColor(COLOR_DEFAULT);
+        recibidos = new LinkedList<Message>();
+}
 
     
-  		while(n.getNeighborNodeIterator() != null ){
-  			
-  				Message m= new Message("Alan es puto");
-  				sendMessage(m,n);
-  			 		}
-	
-    	
-	
-	
-
-
-	System.out.println("¿Qué necesitas que haga para que un nodo genere un mensaje en cada iteración y lo mande a todos sus vecinos, y despues lea un mensaje de y lo reenvie a todos sus vecinos siempre y cuando su tiempo de vida, del mensaje, lo permita?");
+    public LinkedList<Message> getMessages(){
+        return recibidos;
     }
+
+    public Node getNode(){
+        return node;
+	}
+
+    public void run(){
+        while(this.activo){
+            Iterator<Node> nNeigh = node.getNeighborNodeIterator();
+            while(nNeigh.hasNext()) {
+                Node n = nNeigh.next();
+                Message m = new Message(node.getId(), n.getId());
+                this.sendMessage(m,m.getDestination());
+            }
+            Message m = readMessage();
+            if(m!=null){
+                recibidos.add(m);
+                nNeigh = node.getNeighborNodeIterator();
+                while(nNeigh.hasNext()) {
+                    Node n = nNeigh.next();
+                    Message reenvio = m.clone();
+                    reenvio.setDestination(n.getId());
+                    this.sendMessage(reenvio, reenvio.getDestination());
+                    
+                }
+            }
+            sleep(100);
+        }
+    }
+
+    
 
 
     public String getText(){
