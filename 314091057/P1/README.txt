@@ -6,6 +6,8 @@ Miguel Andres Guevara Castro 314091057
 
 Erick Gonzalez Duran 314271103
 
+Rivas Leon Alexis 314215323
+
 Ángeles Martínez Ángela Janín  314201009
 
 
