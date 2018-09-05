@@ -32,6 +32,7 @@ public class CDGraph extends Thread{
     }
 
     public void run(){
+<<<<<<< HEAD
         graph.display();
         for( Node i : graph.getEachNode() ){
             i.addAttribute("ui.label", i.getId());
@@ -47,6 +48,23 @@ public class CDGraph extends Thread{
             }
             sleep(100);
         }
+=======
+	graph.display();
+	for( Node i : graph.getEachNode() ){
+	    i.addAttribute("ui.label", i.getId());
+	    CDNode cdn = new CDNode(this, i);
+	    new Thread(cdn).start();
+	    nodes.add(cdn);
+	}
+	this.createFrame();
+	while(active){
+	    while(!list.isEmpty()){
+		String[] tmp = list.poll();
+		graph.getNode(tmp[0]).setAttribute("ui.class",  tmp[1]);
+	    }
+	    sleep(100);
+	}
+>>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
     }
 
     public void addChangeColor(String nodeId, String color){
@@ -90,6 +108,7 @@ public class CDGraph extends Thread{
 
         frame.pack();
 
+<<<<<<< HEAD
         JButton button = new JButton("Detener");
         button.setSize(800, 30);
         button.addActionListener(new ActionListener(){
@@ -109,10 +128,32 @@ public class CDGraph extends Thread{
             jPanel1.add(component);
         }
         frame.setVisible(true);
+=======
+	JButton button = new JButton("Detener");
+	button.setSize(800, 30);
+	button.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+		    stopAction();
+		}
+	});
+	jPanel1.add(button);
+
+	Iterator<CDNode> iterator = nodes.iterator();
+	int y = 30;
+	while(iterator.hasNext()){
+	    JComponent component = iterator.next();
+	    component.setSize(760, 30);
+	    component.setLocation(30, y);
+	    y+=35;
+	    jPanel1.add(component);
+	}
+	frame.setVisible(true);
+>>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
 
     }
 
     private void sleep(int ms){
+<<<<<<< HEAD
         try{
             Thread.sleep(ms);
         }catch(Exception ex){
@@ -135,6 +176,20 @@ public class CDGraph extends Thread{
             System.out.print("Node " + tmp.getNode().getId() + ": ");
             System.out.println(tmp.getMessages());
         }
+=======
+	try{
+	    Thread.sleep(ms);
+	}catch(Exception ex){
+	}
+    }
+
+    public void stop(){
+	active = false;
+	Iterator<CDNode> iterator = nodes.iterator();
+	while(iterator.hasNext()){
+	    iterator.next().stop();
+	}
+>>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
     }
 
     private void stopAction(){

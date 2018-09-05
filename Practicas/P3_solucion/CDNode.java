@@ -23,9 +23,13 @@ public class CDNode extends JLabel implements Runnable{
     private boolean activo;
     private Transport transport;
     private CDGraph graph;
+<<<<<<< HEAD
     private LinkedList<Message> recibidos;
     private CDNode.Type type;
     private LinkedList<Message> exitosos;
+=======
+    private CDNode.Type type;
+>>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
 
 
     public CDNode(CDGraph g,Node n){
@@ -35,8 +39,12 @@ public class CDNode extends JLabel implements Runnable{
         transport = Transport.getInstance();
         this.graph = g;
         this.setFillColor(COLOR_DEFAULT);
+<<<<<<< HEAD
         recibidos = new LinkedList<Message>();
         exitosos = new LinkedList<Message>();
+=======
+    
+>>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
     }
 
     public CDNode(CDGraph g,Node n, CDNode.Type type){
@@ -44,6 +52,7 @@ public class CDNode extends JLabel implements Runnable{
         this.type = type;
     }
 
+<<<<<<< HEAD
     public LinkedList<Message> getExistosos(){
         return this.exitosos;
     }
@@ -52,6 +61,8 @@ public class CDNode extends JLabel implements Runnable{
         return recibidos;
     }
 
+=======
+>>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
     public Node getNode(){
         return node;
     }
@@ -71,8 +82,12 @@ public class CDNode extends JLabel implements Runnable{
             if(m!=null){
                 recibidos.add(m);
                 if(type != null && type == CDNode.Type.DESTINATION){
+<<<<<<< HEAD
                     exitosos.add(m);
                     System.out.println(m.getRecorrido());
+=======
+                    // TODO
+>>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
                 }else{
                     Iterator<Node> nNeigh = node.getNeighborNodeIterator();
                     while(nNeigh.hasNext()) {
