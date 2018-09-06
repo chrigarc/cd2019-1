@@ -1,7 +1,9 @@
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import org.graphstream.graph.Node;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import javax.swing.JFrame;
@@ -25,6 +27,7 @@ public class CDGraph extends Thread{
     private JFrame frame;
     private String source;
     private String destination;
+    private CDNode nodeDestination;
 
     public CDGraph(Graph g){
         this.graph = g;
@@ -50,6 +53,7 @@ public class CDGraph extends Thread{
                 if(i.getId().equals(source)){
             }else if(i.getId().equals(destination)){
                 cdn = new CDNode(this, i, CDNode.Type.DESTINATION);
+                nodeDestination = cdn;
             }else{
                 cdn = new CDNode(this, i);
             }
@@ -158,13 +162,56 @@ public class CDGraph extends Thread{
     *  Las computaciones equivalentes que tienen que encontrar de ley son [A, B, E, F, D] y [A, E, B, F, D]
     */
     private void renderComputacionesEquivalentes(){
-        Graph equivalentes = null;
+        Graph equivalentes = new SingleGraph("equivalentes");
+        LinkedList<Message> exitosos = nodeDestination.getExitosos();
+        LinkedList<Message> l = new LinkedList<Message>();
+        for(Message i:exitosos){
+            if(isEquivalente(i, exitosos) && !l.contains(i)){
+                l.add(i);
+            }
+        }
         if(equivalentes != null){
+            int index_g = 0;
+            int index = 0;
+            for(Message i:l){
+
+                Node anterior = null;
+                for(String j:i.getRecorrido()){
+                    Node n = equivalentes.addNode(index + "__G" + index_g + "_N_" + j);
+                    n.addAttribute("ui.label",n.getId());
+                    if(anterior != null){
+                        equivalentes.addEdge("G" + index_g + "_E" + anterior + j, anterior.getId(), n.getId());
+                    }
+                    anterior = n;
+                    index++;
+                }
+                index_g++;
+            }
             equivalentes.display();
         }
     }
-}
-<<<<<<< HEAD
-=======
 
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
+    private boolean isEquivalente(Message m, LinkedList<Message> l){
+        boolean status = false;
+        for(Message i:l){
+            if(!m.equals(i) && m.getRecorrido().size() == i.getRecorrido().size()){
+                boolean tmp = true;
+                for(String j:m.getRecorrido()){
+                    if(!i.getRecorrido().contains(j)){
+                        tmp = false;
+                    }
+                }
+                boolean tmp2 = true;
+                for(String j:i.getRecorrido()){
+                    if(!m.getRecorrido().contains(j)){
+                        tmp2 = false;
+                    }
+                }
+                if(tmp && tmp2){
+                    status = tmp;
+                }
+            }
+        }
+        return status;
+    }
+}

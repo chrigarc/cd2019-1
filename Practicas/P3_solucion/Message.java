@@ -12,11 +12,7 @@ public class Message{
     private String source;
     private String destination;
     private Serializable content;
-<<<<<<< HEAD
     private LinkedList<String> recorrido;
-=======
-    private Object recorrido;
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
 
     public Message(String source, String destination, Serializable content){
         this.source = source;
@@ -24,11 +20,8 @@ public class Message{
         this.content = content;
         this.ttl = TTL_DEFAULT;
         this.recorrido = new LinkedList<String>();
-<<<<<<< HEAD
         this.recorrido.add(source);
         this.recorrido.add(destination);
-=======
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
     }
 
     public int getTTL(){
@@ -47,11 +40,7 @@ public class Message{
         return content;
     }
 
-<<<<<<< HEAD
     public LinkedList<String> getRecorrido(){
-=======
-    public Object getRecorrido(){
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
         return this.recorrido;
     }
 
@@ -60,10 +49,7 @@ public class Message{
     }
 
     public void setDestination(String destination){
-<<<<<<< HEAD
         this.recorrido.add(destination);
-=======
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
         this.destination = destination;
     }
 
@@ -77,11 +63,17 @@ public class Message{
 
     public Message clone(){
         Message m  = new Message(source, destination, content);
-<<<<<<< HEAD
         m.recorrido = (LinkedList<String>)this.recorrido.clone();
-=======
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
         m.ttl = this.ttl;
         return m;
+    }
+
+    public boolean equals(Object o){
+        boolean status = false;
+        if(o instanceof Message){
+            Message tmp = (Message)o;
+            status = this.recorrido.toString().equals(tmp.recorrido.toString());
+        }
+        return status;
     }
 }

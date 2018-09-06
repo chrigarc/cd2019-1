@@ -54,7 +54,3 @@ public class Transport{
         }
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2

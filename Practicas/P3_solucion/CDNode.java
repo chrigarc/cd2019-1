@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class CDNode extends JLabel implements Runnable{
 
     public enum Type{
-        SOURCE, DESTINATION;
+        SOURCE, DESTINATION, NORMAL;
     }
 
     public static final String COLOR_DEFAULT = "blue";
@@ -23,14 +23,9 @@ public class CDNode extends JLabel implements Runnable{
     private boolean activo;
     private Transport transport;
     private CDGraph graph;
-<<<<<<< HEAD
     private LinkedList<Message> recibidos;
     private CDNode.Type type;
     private LinkedList<Message> exitosos;
-=======
-    private CDNode.Type type;
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
-
 
     public CDNode(CDGraph g,Node n){
         super();
@@ -39,21 +34,19 @@ public class CDNode extends JLabel implements Runnable{
         transport = Transport.getInstance();
         this.graph = g;
         this.setFillColor(COLOR_DEFAULT);
-<<<<<<< HEAD
         recibidos = new LinkedList<Message>();
-        exitosos = new LinkedList<Message>();
-=======
-    
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
+        this.type = CDNode.Type.NORMAL;
     }
 
     public CDNode(CDGraph g,Node n, CDNode.Type type){
         this(g, n);
         this.type = type;
+        if(type == CDNode.Type.DESTINATION){
+            exitosos = new LinkedList<Message>();
+        }
     }
 
-<<<<<<< HEAD
-    public LinkedList<Message> getExistosos(){
+    public LinkedList<Message> getExitosos(){
         return this.exitosos;
     }
 
@@ -61,8 +54,6 @@ public class CDNode extends JLabel implements Runnable{
         return recibidos;
     }
 
-=======
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
     public Node getNode(){
         return node;
     }
@@ -80,14 +71,9 @@ public class CDNode extends JLabel implements Runnable{
 
             Message m = readMessage();
             if(m!=null){
-                recibidos.add(m);
+                //recibidos.add(m); <- para almacenar todos los mensajes recibidos
                 if(type != null && type == CDNode.Type.DESTINATION){
-<<<<<<< HEAD
                     exitosos.add(m);
-                    System.out.println(m.getRecorrido());
-=======
-                    // TODO
->>>>>>> 03864185f9105eb900e2e392da90486a497f4ac2
                 }else{
                     Iterator<Node> nNeigh = node.getNeighborNodeIterator();
                     while(nNeigh.hasNext()) {
