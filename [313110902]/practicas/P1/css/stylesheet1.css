@@ -1,0 +1,19 @@
+node #rojo {
+    fill-color: red;
+}
+
+node #verde {
+    fill-color: green;
+}
+
+node #amarillo {
+    fill-color: yellow;
+}
+
+node #azul {
+    fill-color: blue;
+}
+
+node #morado {
+    fill-color: purple;
+}

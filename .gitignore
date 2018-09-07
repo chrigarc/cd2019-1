@@ -1,0 +1,13 @@
+**/*.class
+**/*.jar
+**/*~
+**/*.jar.asc
+**/*.pom.asc
+**/lib
+**/build.xml
+**/manifest.mf
+**/nbproject
+**/nbproject/*
+**/.DS_Store
+**/build
+**/build/*
