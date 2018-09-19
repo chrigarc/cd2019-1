@@ -162,7 +162,7 @@ public class CDGraph extends Thread{
     *  Las computaciones equivalentes que tienen que encontrar de ley son [A, B, E, F, D] y [A, E, B, F, D]
     */
     private void renderComputacionesEquivalentes(){
-        Graph equivalentes = new SingleGraph("");
+        Graph equivalentes = new SingleGraph("Equivalentes");
         CDNode nDestino = null;
 
         Iterator<CDNode> iterator = nodes.iterator();
@@ -238,6 +238,27 @@ public class CDGraph extends Thread{
         System.out.println("Computaciones equivalentes:");
         for (LinkedList<String> r : eq) {
           System.out.println(r);
+        }
+
+        int index = 0;
+        int subG = 1;
+        int subId = 1;
+        boolean firstNodeSubGraph = true;
+        for (LinkedList<String> r : eq) {
+          for (String n : r) {
+            equivalentes.addNode("Sub"+subG+"_"+n+subId);
+            equivalentes.getNode("Sub"+subG+"_"+n+subId).addAttribute("ui.label","Sub"+subG+"_"+n+subId);
+            if (!firstNodeSubGraph) {
+              equivalentes.addEdge(subG+":"+(index-1)+":"+index,index-1,index);
+            }else{
+              firstNodeSubGraph = false;
+            }
+            index++;
+            subId++;
+          }
+          firstNodeSubGraph = true;
+          subId = 0;
+          subG++;
         }
         equivalentes.display();
     }
