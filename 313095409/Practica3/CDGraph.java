@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.View;
 import org.graphstream.graph.implementations.SingleGraph;
+import java.util.Comparator;
+import java.text.Collator;
 
 
 public class CDGraph extends Thread{
@@ -162,7 +164,9 @@ public class CDGraph extends Thread{
     private void renderComputacionesEquivalentes(){
         Graph equivalentes = new SingleGraph("");
         CDNode nDestino = null;
+
         Iterator<CDNode> iterator = nodes.iterator();
+        //Busamos en CDNode de destino en nodes
         while(iterator.hasNext()) {
           CDNode actual = iterator.next();
           if (actual.getNode().getId().equals(destination)) {
@@ -171,19 +175,70 @@ public class CDGraph extends Thread{
           }
         }
 
+        //Obtenemos sus mensajes
         LinkedList<Message> recibidos = nDestino.recibidos();
         LinkedList<LinkedList<String>> recorridos = new LinkedList();
 
+        //Obtenemos los recorridos que terminan en el destino de los mensajes obtenidos
         for (Message m : recibidos) {
           if (m.getRecorrido().getLast().equals(destination)) {
             recorridos.add(m.getRecorrido());
           }
         }
 
-        for (LinkedList<String> r : recorridos) {
-          System.out.println(r);
+        LinkedList<LinkedList<String>> compEquivalentes = new LinkedList();
+
+        //A cada recorrido lo ordenamos y a los recorridos de una lista sin el recorrido orginal
+        //y si el recorrido ordenado es igual a alguno de los recorridos ordenados, el original se
+        //agrega a la lista de computaciones equivalantes.
+        for (LinkedList<String> re : recorridos) {
+
+          LinkedList<LinkedList<String>> recorridos_ = (LinkedList<LinkedList<String>>)recorridos.clone();
+          LinkedList<String> r = (LinkedList<String>)re.clone();
+
+          while(recorridos_.remove(r)){}
+
+          for (LinkedList<String> r_ : recorridos_) {
+            if (r.equals(r_)) {
+              while(recorridos_.remove(r_)){}
+            }
+          }
+
+          r.sort(new Comparator<String>(){
+                  @Override
+                      public int compare(String o1,String o2){
+                          return Collator.getInstance().compare(o1,o2);
+                      }
+                  });
+
+          for (LinkedList<String> r_ : recorridos_) {
+            LinkedList<String> r__ = (LinkedList<String>) r_.clone();
+
+            r__.sort(new Comparator<String>(){
+                    @Override
+                        public int compare(String o1,String o2){
+                            return Collator.getInstance().compare(o1,o2);
+                        }
+                    });
+
+            if (r.equals(r__)) {
+              compEquivalentes.add(re);
+              break;
+            }
+          }
         }
 
+        //Quitamos los repetidos
+        LinkedList<LinkedList<String>> eq = new LinkedList();
+        for (LinkedList<String> r : compEquivalentes) {
+          if (!eq.contains(r))
+            eq.add(r);
+        }
+
+        System.out.println("Computaciones equivalentes:");
+        for (LinkedList<String> r : eq) {
+          System.out.println(r);
+        }
         equivalentes.display();
     }
 }
