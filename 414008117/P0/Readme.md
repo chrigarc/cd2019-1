@@ -4,9 +4,9 @@ https://github.com/chrigarc/cd2019-1
 Hacer fork - Desde la pagina
 Instalar git
 Clonar
-- git clone git@github.com:[SU USUARIO]/cd2019-1.git
+- git clone git@github.com/asmodeus626/cd2019-1.git
 Hacer un branch
-- git checkout -b NOMBRE_RAMA
+- git checkout -b rama1
 Agregar el repositorio de Chris como upstream
 - git remote add upstream
 https://github.com/chrigarc/cd2019-1.git
@@ -19,7 +19,7 @@ git add .
 - Indicar carga de información o commit
 git commit -m "mensaje descriptivo"
 - Realizar la carga, o hacer push
-git push origin SU_RAMA
+git push origin rama1
 - Desde la pagina solicitar pull request
 
 git@github.com:chrigarc/cd2019-1.git
