@@ -44,8 +44,9 @@ public class CDNode extends JLabel implements Runnable{
     public void run(){
         Message men = new Message("Mensaje de "+node.getId());
         //En esta parte envío el mensaje que yo creé a todos los vecinos.
-        for(CDNode cdn:getVecinos()){
-            sendMessage(men,cdn.node.getId());
+        for(Node nodo:getVecinos()){
+            String idvec = nodo.getId();
+            sendMessage(men,idvec);
         }
         
         Message men2 = readMessage();
@@ -53,9 +54,9 @@ public class CDNode extends JLabel implements Runnable{
         //En esta parte envío el mensaje que recibí a los demás.
         if(men2 != null && men2.tvida>0){
             tm = men2.contenido;
-            for(CDNode cdn:getVecinos()){
+            for(Node nodo:getVecinos()){
                 if(men2.tvida>0){
-                    sendMessage(men2,cdn.node.getId());
+                    sendMessage(men2,nodo.getId());
                 }
             }
         }else{
@@ -65,15 +66,25 @@ public class CDNode extends JLabel implements Runnable{
 
     /**
      * Obtiene la lista de vecinos de este nodo.
-     * @return 
+     * @return
      */
-    public LinkedList<CDNode> getVecinos(){
-        LinkedList<CDNode> lista = new LinkedList();
+    public LinkedList<Node> getVecinos(){
+        LinkedList<Node> lista = new LinkedList();
+        
         Collection<Edge> col = node.getLeavingEdgeSet();
         for(Edge e:col){
-            Node n = e.getNode1();
-            lista.add(graph.getNodoID(n.getId()));
+            Node n0 = e.getNode0();
+            Node n1 = e.getNode1();
+            
+            if(!lista.contains(n0) && !n0.equals(node)){
+                lista.add(n0);
+            }
+            
+            if(!lista.contains(n1) && !n1.equals(node)){
+                lista.add(n1);
+            }
         }
+        System.out.println("Vecinos de "+node.getId()+": \n"+lista);
         return lista;
     }
     
@@ -85,20 +96,24 @@ public class CDNode extends JLabel implements Runnable{
 	return s;
     }
  
-
+    @Override
+    public String toString(){
+        return node.getId();
+    }
+    
     public boolean sendMessage(Message m, String destination){
         m.origen = node.getId();
         m.destino = destination;
 	this.setFillColor(COLOR_SEND);
 	boolean status = transport.put(m, destination);
-	//this.setFillColor(COLOR_DEFAULT);
+	this.setFillColor(COLOR_DEFAULT);
 	return status;
     }
 
     public Message readMessage(){
-	this.setFillColor(COLOR_READ);
-	Message m = transport.pop(node.getId());
-	//this.setFillColor(COLOR_DEFAULT);
+        this.setFillColor(COLOR_READ);
+        Message m = transport.pop(node.getId());
+	this.setFillColor(COLOR_DEFAULT);
 	return m;
     }
 

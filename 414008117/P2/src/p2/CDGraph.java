@@ -23,10 +23,10 @@ import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.View;
 
 
-public class CDGraph implements Runnable{
+public class CDGraph extends Thread{
 
     private Graph graph;
-    private Set<CDNode> nodes;
+    Set<CDNode> nodes;
     private ConcurrentLinkedDeque<String[]> list;
     private boolean active;
     private JFrame frame;
@@ -136,7 +136,7 @@ public class CDGraph implements Runnable{
 	}
     }
 
-    public void stop(){
+    public void stopAll(){
 	active = false;
 	Iterator<CDNode> iterator = nodes.iterator();
 	while(iterator.hasNext()){
@@ -145,6 +145,6 @@ public class CDGraph implements Runnable{
     }
 
     private void stopAction(){
-	stop();
+	stopAll();
     }
 }

@@ -27,7 +27,8 @@ public class Main{
 	gen.end();
 
 	CDGraph cdg = new CDGraph(graph);
-	(new Thread(cdg)).start();
+        cdg.start();
+        //(new Thread(cdg)).start();
     }
     
 }
