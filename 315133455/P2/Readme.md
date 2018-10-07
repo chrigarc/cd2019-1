@@ -1,4 +1,4 @@
-# Práctica 2 - Broadcast
+﻿# Práctica 2 - Broadcast
 
 ### Objetivo
 Realizar simulaciones de envio por broadcast en una red de nodos 
@@ -25,5 +25,7 @@ git pull upstream master
 ## Apendice
 ``` 
 javac -cp .:../lib/gs-core-1.3.jar:../lib/gs-ui-1.3.jar:../lib/gs-algo-1.3.jar Main.java
-java -cp .:../lib/gs-core-1.3.jar:../lib/gs-ui-1.3.jar:../lib/gs-algo-1.3.jar Main
+java -cp .:../lib/gs-core-1.3.jar:../lib/gs-ui-1.3.jar:../lib/gs-algo-1.3.jar Main 
+
 ```
+Terminada: Ramón Arenas Ayala
