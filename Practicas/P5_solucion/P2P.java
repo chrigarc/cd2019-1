@@ -15,7 +15,7 @@ public class P2P extends Thread{
         super();
         this.puerto = puerto;
         try{
-            broadcast = InetAddress.getByName("0.0.0.0");
+            broadcast = InetAddress.getByName("255.255.255.255");
         }catch(Exception ex){
             System.out.println(ex);
         }
@@ -29,12 +29,12 @@ public class P2P extends Thread{
         while(activo){
             try{
                 for(int i:PUERTOS){
-                    if(i!=puerto){
+                  //  if(i!=puerto){
                         DatagramSocket socketUDP = new DatagramSocket();
                         DatagramPacket peticion = new DatagramPacket(identificador.getBytes(), identificador.length(), broadcast, i);
                         socketUDP.send(peticion);
                         socketUDP.close();
-                    }
+                  //  }
                 }
                 sleep(100);
             }catch(Exception ex){
