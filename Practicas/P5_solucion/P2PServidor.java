@@ -33,12 +33,12 @@ public class P2PServidor extends Thread{
                 DatagramPacket mensajeEntrada = new DatagramPacket(bufer, bufer.length);
     	        socket.receive(mensajeEntrada);
     	        linea = new String(mensajeEntrada.getData(), 0, mensajeEntrada.getLength());
-            	System.out.println("Recibido:" + linea + ".");
+            	System.out.println("PORT: "+puerto+" Recibido:" + linea + ".");
                 if(graph.getNode(linea)==null){
                     graph.addNode(linea).addAttribute("ui.label", linea);
                     graph.addEdge(identificador + "-" + linea, identificador, linea);
                 }
-                sleep(100);
+                sleep(10);
             }catch(Exception ex){
                 System.out.println(ex);
             }
