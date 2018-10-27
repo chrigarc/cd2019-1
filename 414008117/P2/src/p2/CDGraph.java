@@ -28,7 +28,7 @@ public class CDGraph extends Thread{
     private Graph graph;
     Set<CDNode> nodes;
     private ConcurrentLinkedDeque<String[]> list;
-    private boolean active;
+    public boolean active;
     private JFrame frame;
 
     public CDGraph(Graph g){

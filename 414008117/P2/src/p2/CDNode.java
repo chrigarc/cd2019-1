@@ -17,8 +17,7 @@ public class CDNode extends JLabel implements Runnable{
 
     public static final String COLOR_DEFAULT = "blue";
     public static final String COLOR_SEND = "red";
-    public static final String COLOR_READ = "green";
-    
+    public static final String COLOR_READ = "green";    
     
     Node node;
     private boolean activo;
@@ -42,7 +41,8 @@ public class CDNode extends JLabel implements Runnable{
      * vida, del mensaje, lo permita?
     **/
     public void run(){
-        Message men = new Message("Mensaje de "+node.getId());
+        while(graph.active){ //Mientras la gráfica esté activa se van a enviar y recibir mensajes.
+        Message men = new Message(" Mensaje de "+node.getId());
         //En esta parte envío el mensaje que yo creé a todos los vecinos.
         for(Node nodo:getVecinos()){
             String idvec = nodo.getId();
@@ -61,6 +61,7 @@ public class CDNode extends JLabel implements Runnable{
             }
         }else{
             tm = "";
+        }
         }
     }
 
@@ -84,7 +85,6 @@ public class CDNode extends JLabel implements Runnable{
                 lista.add(n1);
             }
         }
-        System.out.println("Vecinos de "+node.getId()+": \n"+lista);
         return lista;
     }
     
