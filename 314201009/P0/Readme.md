@@ -23,3 +23,12 @@ git push origin SU_RAMA
 - Desde la pagina solicitar pull request
 
 git@github.com:chrigarc/cd2019-1.git
+
+
+git add 31420019
+git commit -m "mensaje "
+git push origin angela
+
+git checkout .
+git pull upstream master
+git pull origin angela 
