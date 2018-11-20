@@ -11,4 +11,5 @@
 **/.DS_Store
 **/build
 **/build/*
-/414008117/P2/dist/
+**/target
+**/target/*
