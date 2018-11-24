@@ -52,7 +52,7 @@ public class Transport{
 	  sleep(300);
     try {
       for (Tuple<Message,String> tupla : registro) {
-        if (tupla.y == nodeId)
+        if (tupla.y.equals(nodeId))
         return tupla.x;
       }
     } catch (Exception e) {
