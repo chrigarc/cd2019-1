@@ -11,3 +11,5 @@
 **/.DS_Store
 **/build
 **/build/*
+**/target
+**/target/*
