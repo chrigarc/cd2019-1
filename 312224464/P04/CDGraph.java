@@ -77,7 +77,7 @@ public class CDGraph extends Thread{
     }
 
     private void createFrame(){
-        frame = new JFrame("Práctica 3");
+        frame = new JFrame("Práctica 4");
         frame.setSize(800, 800);
         frame.setLocationRelativeTo(null);                       // centramos la ventana en la pantalla
 

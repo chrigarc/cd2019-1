@@ -3,6 +3,7 @@ import java.util.Iterator;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.util.LinkedList;
+import java.lang.Math;
 
 @SuppressWarnings("unchecked")
 public class CDNode extends JLabel implements Runnable{
@@ -27,6 +28,8 @@ public class CDNode extends JLabel implements Runnable{
     private CDNode.Type type;
     private LinkedList<Message> recibidos; //Debemos tener una lista de mensajes recibidos
     private LinkedList<Message> recibidoDestinatario; //Debemos tener un lista de mensajes que hayan llegado a su destinatario
+    public int reloj;
+    public int marca_temporal;
 
     public CDNode(CDGraph g,Node n){
         super();
@@ -36,7 +39,8 @@ public class CDNode extends JLabel implements Runnable{
         this.graph = g;
         this.setFillColor(COLOR_DEFAULT);
         this.recibidos = new LinkedList<>();
-    
+        this.reloj = 0;
+        this.marca_temporal = 0;
     }
 
     public CDNode(CDGraph g,Node n, CDNode.Type type){
@@ -51,6 +55,34 @@ public class CDNode extends JLabel implements Runnable{
         return node;
     }
 
+    /**
+     * Regresa el valor del reloj de Lamport.
+     */
+    public int getReloj(){
+        return this.reloj;
+    }
+
+    /**
+     * Modifica el valor del reloj de Lamport.
+     */
+    public void setReloj(int reloj){
+        this.reloj = reloj;
+    }
+
+    /**
+     * Regresa el valor de la marca temporal del mensaje.
+     */
+    public int getMarcaTemporal(){
+        return this.marca_temporal;
+    }
+
+    /**
+     * Modifica el valor de la marca temporal del mensaje.
+     */
+    public void setMarcaTemporal(int marca_temporal){
+        this.marca_temporal = marca_temporal;
+    }
+
     public void run(){
         //Mientras que el estado de CDNode este activo 
         while(this.activo){
@@ -60,11 +92,12 @@ public class CDNode extends JLabel implements Runnable{
                     Node n = nNeigh.next();//Tomamos el el vecino
                     //Creamos un mensaje desde el nodo actual hacia el vecino n
                     Message m = new Message(node.getId(), n.getId(), CDNode.CreateMessage(node.getId(), n.getId()));
-                    this.sendMessage(m);//Enviamos el mensaje
+                    sendMessage(m, getReloj()); //Enviamos el mensaje junto con el valor del reloj
                 }
             }
 
             Message m = this.readMessage();//Guardamos el mensaje recibido en m.
+            setReloj ( Math.max( getMarcaTemporal(), getReloj() ) +1);
             if(m!=null){
                 recibidos.add(m);//Agregamos el mensaje a los recibidos.
                 if(type != null && type == CDNode.Type.DESTINATION){//Verificamos si el mensaje recibido llego a su destino.
@@ -83,7 +116,7 @@ public class CDNode extends JLabel implements Runnable{
                         
                         reenvio.getRecorrido().add(n.getId());//actualizamos el recorrido para el mensaje reenviado
                         reenvio.setTTL(m.getTTL()-1);
-                        this.sendMessage(reenvio);
+                        sendMessage(reenvio, getReloj()); //Enviamos el mensaje junto con el valor del reloj
                     }
                 }
             }
@@ -96,20 +129,28 @@ public class CDNode extends JLabel implements Runnable{
         return this.recibidoDestinatario;
     }
 
-
     public String getText(){
         String s = super.getText();
+
         if(node!=null){
             s+="ID: " + node.getId();
         }
+
         if(recibidos != null && !recibidos.isEmpty()){
             s+=", ultimo mensaje recibido de: " + recibidos.getLast().getSource();
         }
+
+        // Mostramos el valor actual del reloj de Lamport
+        s+= " - Reloj: " + getReloj();
         return s;
     }
 
 
-    public boolean sendMessage(Message m){
+    public boolean sendMessage(Message m, int reloj){
+    	//Actualizamos el reloj
+        setReloj(reloj + 1);
+        setMarcaTemporal(reloj);
+
         this.setFillColor(COLOR_SEND);
         boolean status = transport.put(m);
         this.setFillColor(COLOR_DEFAULT);
@@ -122,7 +163,6 @@ public class CDNode extends JLabel implements Runnable{
         this.setFillColor(COLOR_DEFAULT);
         return m;
     }
-
 
     public void stop(){
         this.activo = false;

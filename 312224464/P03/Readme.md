@@ -1,4 +1,3 @@
-
 ## Equipo
 312224464 Estrada Gómez César Derian
 311175318 Muñiz Patiño Andrea Fernanda
@@ -18,7 +17,7 @@ Se entregan las clases que simulan el envio por broadcast desde un nodo inicial 
 * En la clase propuesta generar una grafica diferente a la del ejercicio que esten seguros que genere computaciones equivalentes
 
 
-***** Implementación - Clases Modificadas *****
+### Implementación - Clases Modificadas *****
 
 *** Message ***
 Se tuvo que cambiar el tipo de Object a LinkedList<String> de la variable 'recorrido' con el fin de capturar
