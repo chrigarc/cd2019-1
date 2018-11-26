@@ -18,7 +18,6 @@ import org.graphstream.graph.implementations.SingleGraph;//agregamos la dependec
 import java.util.LinkedList;
 import java.awt.Color;
 
-
 public class CDGraph extends Thread{
 
     private Graph graph;
