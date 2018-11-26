@@ -45,3 +45,7 @@ Una vez obtenidas las computaciones las graficamos. Creamos una gráfica.
 Una vez que tengamos la lista de computaciones equivalentes, hacemos un recorrido sobre su respectiva lista 'recorrido' y se agrega un nodo a la gráfica por cada elemento del recorrido.
 También por cada dos nodos consecutivos agregamos una arista que una dichos nodos.
 Al terminar de recorrer toda la lista de computaciones y graficar cada recorrido mostramos la gráfica.
+
+*** Propuesta ***
+Creamos una gráfica con dos nodos A (nodo inicial) y B (nodo final), donde A enviará mensajes a B.
+Dado que la gráfica es de dos nodos, estamos asegurando que el nodo inicial y final siempre serán los mismos y que todos los nodos se repetirán en la misma cantidad de pasos.

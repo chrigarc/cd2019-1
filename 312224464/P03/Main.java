@@ -11,7 +11,8 @@ public class Main{
 
         SingleGraph graph = new SingleGraph("Práctica 3");
         // Termina la hoja de estilo para que las computaciones equivalentes tengan los nodos de diferentes colores
-        graph.addAttribute("ui.stylesheet", "node.red { fill-color: red; } node.blue { fill-color: blue; } node.green { fill-color: green; }");
+        // Les cambiamos los colores de las computaciones en la clase CDGraph
+        graph.addAttribute("ui.stylesheet", "node.red { fill-color: red; } node.blue { fill-color: blue; } node.green { fill-color: green; } node.equivalente { fill-color: red; }");
         graph.addNode("A");
         graph.addNode("B");
         graph.addNode("C");

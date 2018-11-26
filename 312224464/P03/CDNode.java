@@ -4,6 +4,7 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import java.util.LinkedList;
 
+@SuppressWarnings("unchecked")
 public class CDNode extends JLabel implements Runnable{
 
     public enum Type{
@@ -13,6 +14,7 @@ public class CDNode extends JLabel implements Runnable{
     public static final String COLOR_DEFAULT = "blue";
     public static final String COLOR_SEND = "red";
     public static final String COLOR_READ = "green";
+    public static final String COLOR_COMPUTACIONAL = "pink";
 
     public static String CreateMessage(String s, String d){
         return s + " -> " + d + " : " + System.nanoTime();

@@ -16,6 +16,7 @@ import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.View;
 import org.graphstream.graph.implementations.SingleGraph;//agregamos la dependecia para crear las computaciones equivalentes
 import java.util.LinkedList;
+import java.awt.Color;
 
 
 public class CDGraph extends Thread{
@@ -28,6 +29,7 @@ public class CDGraph extends Thread{
     private String source;
     private String destination;
     private CDNode general;//agregamos un CDNode con el que trabajaremos para optener las computaciones equivalentes
+    private Graph equivalentes; //agregamos una gráfica para mostrar las computaciones equivalentes. 
 
     public CDGraph(Graph g){
         this.graph = g;
@@ -164,7 +166,7 @@ public class CDGraph extends Thread{
     */
     private void renderComputacionesEquivalentes(){
 
-        Graph equivalentes = new SingleGraph("Computaciones Equivalentes");
+        this.equivalentes = new SingleGraph("Computaciones Equivalentes");
         LinkedList<Message> completados = general.getRecibidoDestinatario();
         LinkedList<Message> compEquivalentes = new LinkedList<Message>();
         //Para cada mensaje que llego a su destino 
@@ -180,6 +182,7 @@ public class CDGraph extends Thread{
                 }
         }
 
+
         //Hacemos la configuración de la gráfica a desplegar
         if(equivalentes != null){
 
@@ -192,6 +195,8 @@ public class CDGraph extends Thread{
                 Node actual = null;
                 //Agregamos el nodo del recorrido de la computación y su arista que lo conecta con su nodo anterior.
                 for(String s: mensaje.getRecorrido()){
+
+                    this.graph.getNode(s).addAttribute("ui.class", "equivalente");//le ponemos una clase a los nodos de la gráfica para distinguirlos.
                     actual = equivalentes.addNode(noComputacion+""+iNodo+""+s);//agregamos cada nodo del recorrido
                     actual.addAttribute("ui.label",actual.getId());//le ponemos su etiqueta
 
@@ -206,7 +211,13 @@ public class CDGraph extends Thread{
                 noComputacion++;
             }
             equivalentes.display();//desplegamos la gráfica
+            equivalentes.addAttribute("ui.stylesheet", "node { fill-color: orange; }");//Agregamos un color a los nodos
+            this.graph.addAttribute("ui.stylesheet", "node.equivalente { fill-color: red; }");//Cambiamos de color para los nodos que forman parte de una computación equivalente
         }
+    }
+
+    public Graph getEquivalentes(){
+        return this.equivalentes;
     }
 
 }
