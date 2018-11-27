@@ -10,6 +10,15 @@ El juego consiste en la siguiente:
   * Al iniciar el juego se colocan en la granja una cantidad aleatoria de vacas de cada jugador sobre la granja
   * El ganador del juego es quien sobrevivan sus vaquitas.
 
+## Integrantes del equipo:
+Miguel Andres Guevara Castro 314091057
+
+Erick Gonzalez Duran 314271103
+
+Ángeles Martínez Ángela Janín  314201009
+
+RIvas León Alexis 314215323
+
 ## Maven
 Es una herramienta de software para la gestión y construcción de proyectos Java creada por Jason van Zyl, de Sonatype, en 2002. Es similar en funcionalidad a Apache Ant (y en menor medida a PEAR de PHP y CPAN de Perl), pero tiene un modelo de configuración de construcción más simple, basado en un formato XML. Estuvo integrado inicialmente dentro del proyecto Jakarta pero ahora ya es un proyecto de nivel superior de la Apache Software Foundation.
 
@@ -44,4 +53,8 @@ $ mvn "-Dexec.args=-classpath %classpath main.MainApp" -Dexec.executable=/usr/bi
 
 # Bibliografía
 https://www.oracle.com/technetwork/articles/java/javareflection-1536171.html
+
+
+
+
 
