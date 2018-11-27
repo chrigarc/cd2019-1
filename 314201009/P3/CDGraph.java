@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.View;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CDGraph implements Runnable{
@@ -122,8 +124,16 @@ public class CDGraph implements Runnable{
   public void stop(){
     active = false;
     Iterator<CDNode> iterator = nodes.iterator();
+    CDNode n = iterator.next();
+    List<Message> mensajes = n.getMensajes();
+    n.stop();
     while(iterator.hasNext()){
       iterator.next().stop();
+    }
+    List<Message> equivalentes = Propuesta.equivalentes(mensajes);
+    for(int i = 0; i < equivalentes.size()-1; i++){
+        Message m = equivalentes.get(i);
+        System.out.println(m.toString());
     }
   }
 
