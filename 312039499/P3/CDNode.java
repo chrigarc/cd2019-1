@@ -1,3 +1,4 @@
+
 import org.graphstream.graph.Node;
 import java.util.Iterator;
 import javax.swing.JLabel;
@@ -13,7 +14,6 @@ public class CDNode extends JLabel implements Runnable{
     public static final String COLOR_DEFAULT = "blue";
     public static final String COLOR_SEND = "red";
     public static final String COLOR_READ = "green";
-    int reloj;
 
     public static String CreateMessage(String s, String d){
         return s + " -> " + d + " : " + System.nanoTime();
@@ -25,12 +25,8 @@ public class CDNode extends JLabel implements Runnable{
     private Transport transport;
     private CDGraph graph;
     private CDNode.Type type;
-     private LinkedList<Message> recibidos;
-      private LinkedList<Message> exitosos;
-    public int  reloj ;
-	public int marca_temporal_mensaje ;
-					
-
+    private LinkedList<Message> recibidos; /
+    private LinkedList<Message> recibidoDestinatario; 
 
     public CDNode(CDGraph g,Node n){
         super();
@@ -39,60 +35,62 @@ public class CDNode extends JLabel implements Runnable{
         transport = Transport.getInstance();
         this.graph = g;
         this.setFillColor(COLOR_DEFAULT);
-        recibidos = new LinkedList<Message>();
-        reloj = 0;
-        marca_temporal_mensaje=0;
+        this.recibidos = new LinkedList<>();
+    
     }
 
     public CDNode(CDGraph g,Node n, CDNode.Type type){
         this(g, n);
         this.type = type;
+        if(type == CDNode.Type.DESTINATION){
+            this.recibidoDestinatario = new LinkedList<Message>();
+        }
     }
 
     public Node getNode(){
         return node;
     }
 
-
-
-    public LinkedList<Message> getExitosos(){
-        return this.exitosos;
-    }
     public void run(){
-        while(this.activo){
+         while(this.activo){
             if(type != null && type == CDNode.Type.SOURCE){
                 Iterator<Node> nNeigh = node.getNeighborNodeIterator();
                 while(nNeigh.hasNext()) {
                     Node n = nNeigh.next();
+                    
                     Message m = new Message(node.getId(), n.getId(), CDNode.CreateMessage(node.getId(), n.getId()));
-                    reloj = reloj + 1;
-					marca_temporal_mensaje = reloj;
-					this.sendMessage(mensaje, marca_temporal_mensaje);
+                    this.sendMessage(m);
                 }
             }
 
-            Message m = readMessage();
-          	reloj = max(10,reloj) + 1;
+            Message m = this.readMessage();
             if(m!=null){
                 recibidos.add(m);
                 if(type != null && type == CDNode.Type.DESTINATION){
-                    // TODO
+                    recibidoDestinatario.add(m); 
+                    
                 }else{
+                    
                     Iterator<Node> nNeigh = node.getNeighborNodeIterator();
                     while(nNeigh.hasNext()) {
                         Node n = nNeigh.next();
                         Message reenvio = m.clone();
+                        reenvio.setRecorrido((LinkedList<String>) m.getRecorrido().clone());
                         reenvio.setSource(this.node.getId());
                         reenvio.setDestination(n.getId());
+                        reenvio.getRecorrido().add(n.getId());
                         reenvio.setTTL(m.getTTL()-1);
-                        reloj = reloj + 1;
-						marca_temporal_mensaje = reloj;
-						this.sendMessage(mensaje, marca_temporal_mensaje);
+                        this.sendMessage(reenvio);
                     }
                 }
             }
             sleep(100);
         }
+    }
+
+    //getRecibidoDestino: Mensajes recibidos del destinatario
+    public LinkedList<Message> getRecibidoDestino(){
+        return this.recibidoDestinatario;
     }
 
 
@@ -107,14 +105,8 @@ public class CDNode extends JLabel implements Runnable{
         return s;
     }
 
-    
-     public LinkedList<Message> getMessages(){
-        return recibidos;
-}
 
-
-    public boolean sendMessage(Message m, int  marca_temporal_mensaje){
-    	
+    public boolean sendMessage(Message m){
         this.setFillColor(COLOR_SEND);
         boolean status = transport.put(m);
         this.setFillColor(COLOR_DEFAULT);
@@ -154,3 +146,4 @@ public class CDNode extends JLabel implements Runnable{
         }
     }
 }
+

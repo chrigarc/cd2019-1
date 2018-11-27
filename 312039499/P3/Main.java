@@ -10,7 +10,6 @@ public class Main{
     public static void main(String[] pps){
 
         SingleGraph graph = new SingleGraph("Práctica 3");
-        // Termina la hoja de estilo para que las computaciones equivalentes tengan los nodos de diferentes colores
         graph.addAttribute("ui.stylesheet", "node.red { fill-color: red; } node.blue { fill-color: blue; } node.green { fill-color: green; }");
         graph.addNode("A");
         graph.addNode("B");
@@ -34,4 +33,3 @@ public class Main{
     }
 
 }
-

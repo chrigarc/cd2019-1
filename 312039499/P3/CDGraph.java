@@ -1,5 +1,4 @@
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.SingleGraph;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,9 +14,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.View;
-import java.util.LinkedList;
-
-
+import org.graphstream.graph.implementations.SingleGraph;
+import java.awt.Color;
 
 
 public class CDGraph extends Thread{
@@ -29,7 +27,7 @@ public class CDGraph extends Thread{
     private JFrame frame;
     private String source;
     private String destination;
-    private CDNode nodeDestination;
+    private CDNode eq;
 
     public CDGraph(Graph g){
         this.graph = g;
@@ -51,10 +49,11 @@ public class CDGraph extends Thread{
         for( Node i : graph.getEachNode() ){
             i.addAttribute("ui.label", i.getId());
             CDNode cdn = null;
-                cdn = new CDNode(this, i, CDNode.Type.SOURCE);
-                if(i.getId().equals(source)){
+                 cdn = new CDNode(this, i, CDNode.Type.SOURCE);
+            if(i.getId().equals(source)){
             }else if(i.getId().equals(destination)){
                 cdn = new CDNode(this, i, CDNode.Type.DESTINATION);
+                eq = cdn;
             }else{
                 cdn = new CDNode(this, i);
             }
@@ -78,7 +77,7 @@ public class CDGraph extends Thread{
     private void createFrame(){
         frame = new JFrame("Práctica 3");
         frame.setSize(800, 800);
-        frame.setLocationRelativeTo(null);                       // centramos la ventana en la pantalla
+        frame.setLocationRelativeTo(null);                     
 
         javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
         JPanel jPanel1 = new JPanel();
@@ -163,57 +162,50 @@ public class CDGraph extends Thread{
     *  Las computaciones equivalentes que tienen que encontrar de ley son [A, B, E, F, D] y [A, E, B, F, D]
     */
     private void renderComputacionesEquivalentes(){
-        Graph equivalentes = new SingleGraph("equivalentes");
-        LinkedList<Message> exitosos = nodeDestination.getExitosos();
-        LinkedList<Message> l = new LinkedList<Message>();
-        for(Message i:exitosos){
-            if(isEquivalente(i, exitosos) && !l.contains(i)){
-                l.add(i);
-            }
+
+        Graph equivalentes = new SingleGraph("CompuEquivalentes");
+        LinkedList<Message> completados = eq.getRecibidoDestino();
+        LinkedList<Message> compEquivalentes = new LinkedList<Message>();
+        for(Message mensaje: completados){
+            Set<String> recorrido = new HashSet<String>(mensaje.getRecorrido());
+            for(Message comparar: completados){
+                Set<String> recorridoComparar = new HashSet<String>(comparar.getRecorrido());
+                /
+                if(!recorrido.equals(recorridoComparar) && !compEquivalentes.contains(mensaje))
+                    compEquivalentes.add(mensaje);
+                }
         }
+
+      
         if(equivalentes != null){
-            int index_g = 0;
-            int index = 0;
-            for(Message i:l){
+
+            int noComputacion = 0;
+            int iNodo = 0;
+            
+            for(Message mensaje: compEquivalentes){
 
                 Node anterior = null;
-                for(String j:i.getRecorrido()){
-                    Node n = equivalentes.addNode(index + "__G" + index_g + "_N_" + j);
-                    n.addAttribute("ui.label",n.getId());
+                Node actual = null;
+                for(String s: mensaje.getRecorrido()){
+
+                    this.graph.getNode(s).addAttribute("ui.class", "equivalente");
+                    actual = equivalentes.addNode(noComputacion+""+iNodo+""+s);
+                    actual.addAttribute("ui.label",actual.getId());
+
                     if(anterior != null){
-                        equivalentes.addEdge("G" + index_g + "_E" + anterior + j, anterior.getId(), n.getId());
+                        
+                        equivalentes.addEdge(anterior.getId()+""+actual.getId()+""+noComputacion, anterior.getId(), actual.getId());
                     }
-                    anterior = n;
-                    index++;
+                    anterior = actual;
+                    ++iNodo;
                 }
-                index_g++;
+                noComputacion++;
             }
             equivalentes.display();
+            equivalentes.addAttribute("ui.stylesheet", "node { fill-color: blue; }");
+            this.graph.addAttribute("ui.stylesheet", "node.equivalente { fill-color: brown; }");
         }
     }
 
-    private boolean isEquivalente(Message m, LinkedList<Message> l){
-        boolean status = false;
-        for(Message i:l){
-            if(!m.equals(i) && m.getRecorrido().size() == i.getRecorrido().size()){
-                boolean tmp = true;
-                for(String j:m.getRecorrido()){
-                    if(!i.getRecorrido().contains(j)){
-                        tmp = false;
-                    }
-                }
-                boolean tmp2 = true;
-                for(String j:i.getRecorrido()){
-                    if(!m.getRecorrido().contains(j)){
-                        tmp2 = false;
-                    }
-                }
-                if(tmp && tmp2){
-                    status = tmp;
-                }
-            }
-        }
-        return status;
-	}
-}
 
+}

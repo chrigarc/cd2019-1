@@ -4,11 +4,12 @@ import java.awt.Color;
 import org.graphstream.algorithm.generator.RandomGenerator;
 import org.graphstream.algorithm.generator.Generator;
 
-public class Propuesta{
+public class Main{
 
 
-	SingleGraph graph = new SingleGraph("Práctica 3");
-        // Termina la hoja de estilo para que las computaciones equivalentes tengan los nodos de diferentes colores
+    public static void main(String[] pps){
+
+        SingleGraph graph = new SingleGraph("Práctica 3");
         graph.addAttribute("ui.stylesheet", "node.red { fill-color: red; } node.blue { fill-color: blue; } node.green { fill-color: green; }");
         graph.addNode("A");
         graph.addNode("B");
@@ -16,12 +17,7 @@ public class Propuesta{
         graph.addNode("D");
         graph.addNode("E");
         graph.addNode("F");
-        graph.addNode("G");
-        graph.addNode("H");
 
-
-        graph.addEdge("GH", "G", "H");
-        graph.addEdge("HF", "H", "F");
         graph.addEdge("AB", "A", "B");
         graph.addEdge("AE", "A", "E");
         graph.addEdge("BE", "B", "E");
@@ -34,5 +30,6 @@ public class Propuesta{
         cdg.setSource("A");
         cdg.setDestination("D");
         cdg.start();
-    
+    }
+
 }
