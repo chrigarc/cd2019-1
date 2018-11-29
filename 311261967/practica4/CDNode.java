@@ -3,11 +3,13 @@ import java.util.Iterator;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.util.LinkedList;
+import java.lang.Math;
 
+@SuppressWarnings("unchecked")
 public class CDNode extends JLabel implements Runnable{
 
     public enum Type{
-        SOURCE, DESTINATION, NORMAL;
+        SOURCE, DESTINATION;
     }
 
     public static final String COLOR_DEFAULT = "blue";
@@ -24,9 +26,10 @@ public class CDNode extends JLabel implements Runnable{
     private Transport transport;
     private CDGraph graph;
     private CDNode.Type type;
-    LinkedList<Message> recibido;
-    LinkedList<Message> logrados;
-
+    private LinkedList<Message> recibidos; //Debemos tener una lista de mensajes recibidos
+    private LinkedList<Message> recibidoDestinatario; //Debemos tener un lista de mensajes que hayan llegado a su destinatario
+    public int reloj;
+    public int marca_temporal;
 
     public CDNode(CDGraph g,Node n){
         super();
@@ -35,54 +38,85 @@ public class CDNode extends JLabel implements Runnable{
         transport = Transport.getInstance();
         this.graph = g;
         this.setFillColor(COLOR_DEFAULT);
-	this.recibido = new LinkedList<Message>();
+        this.recibidos = new LinkedList<>();
+        this.reloj = 0;
+        this.marca_temporal = 0;
     }
 
     public CDNode(CDGraph g,Node n, CDNode.Type type){
         this(g, n);
         this.type = type;
-	if(type == CDNode.Type.DESTINATION){
-	    this.logrados = new LinkedList<Message>();
-	}
-    }
-
-    public LinkedList<Message> getLogrados(){
-	return this.logrados;
-    }
-
-    public LinkedList<Message> getMensajes(){
-	return recibido;
+        if(type == CDNode.Type.DESTINATION){
+            this.recibidoDestinatario = new LinkedList<Message>();
+        }
     }
 
     public Node getNode(){
         return node;
     }
 
+    /**
+     * Regresa el valor del reloj de Lamport.
+     */
+    public int getReloj(){
+        return this.reloj;
+    }
+
+    /**
+     * Modifica el valor del reloj de Lamport.
+     */
+    public void setReloj(int reloj){
+        this.reloj = reloj;
+    }
+
+    /**
+     * Regresa el valor de la marca temporal del mensaje.
+     */
+    public int getMarcaTemporal(){
+        return this.marca_temporal;
+    }
+
+    /**
+     * Modifica el valor de la marca temporal del mensaje.
+     */
+    public void setMarcaTemporal(int marca_temporal){
+        this.marca_temporal = marca_temporal;
+    }
+
     public void run(){
+        //Mientras que el estado de CDNode este activo 
         while(this.activo){
             if(type != null && type == CDNode.Type.SOURCE){
-                Iterator<Node> nNeigh = node.getNeighborNodeIterator();
-                while(nNeigh.hasNext()) {
-                    Node n = nNeigh.next();
+                Iterator<Node> nNeigh = node.getNeighborNodeIterator();//Iterador para los vecinos del node.
+                while(nNeigh.hasNext()) {//Para cada vecino
+                    Node n = nNeigh.next();//Tomamos el el vecino
+                    //Creamos un mensaje desde el nodo actual hacia el vecino n
                     Message m = new Message(node.getId(), n.getId(), CDNode.CreateMessage(node.getId(), n.getId()));
-                    this.sendMessage(m);
+                    sendMessage(m, getReloj()); //Enviamos el mensaje junto con el valor del reloj
                 }
             }
 
-            Message m = readMessage();
+            Message m = this.readMessage();//Guardamos el mensaje recibido en m.
+            setReloj ( Math.max( getMarcaTemporal(), getReloj() ) +1);
             if(m!=null){
-                recibido.add(m);
-                if(type != null && type == CDNode.Type.DESTINATION){
-                    logrados.add(m);
-                }else{
+                recibidos.add(m);//Agregamos el mensaje a los recibidos.
+                if(type != null && type == CDNode.Type.DESTINATION){//Verificamos si el mensaje recibido llego a su destino.
+                    recibidoDestinatario.add(m); //uan vez completado ya no lo reenviamos
+                    // TODO
+                }else{//Sino ha llegado a su destino.
+                    //reenviamos a los vecinos.
                     Iterator<Node> nNeigh = node.getNeighborNodeIterator();
-                    while(nNeigh.hasNext()) {
+                    while(nNeigh.hasNext()) {//Para cada vecino
                         Node n = nNeigh.next();
-                        Message reenvio = m.clone();
+                        Message reenvio = m.clone();//clonamos el mensaje.
+                        reenvio.setRecorrido((LinkedList<String>) m.getRecorrido().clone());//le damos un recorrido clonado al mensaje
+
                         reenvio.setSource(this.node.getId());
                         reenvio.setDestination(n.getId());
+                        
+                        reenvio.getRecorrido().add(n.getId());//actualizamos el recorrido para el mensaje reenviado
                         reenvio.setTTL(m.getTTL()-1);
-                        this.sendMessage(reenvio);
+                        sendMessage(reenvio, getReloj()); //Enviamos el mensaje junto con el valor del reloj
                     }
                 }
             }
@@ -90,20 +124,33 @@ public class CDNode extends JLabel implements Runnable{
         }
     }
 
+    //Creamos el método de acceso para obtener los mensajes que han llegado a su destino.
+    public LinkedList<Message> getRecibidoDestinatario(){
+        return this.recibidoDestinatario;
+    }
 
     public String getText(){
         String s = super.getText();
+
         if(node!=null){
             s+="ID: " + node.getId();
         }
-        if(recibido != null && !recibido.isEmpty()){
-            s+=", ultimo mensaje recibido de: " + recibido.getLast().getSource();
+
+        if(recibidos != null && !recibidos.isEmpty()){
+            s+=", ultimo mensaje recibido de: " + recibidos.getLast().getSource();
         }
+
+        // Mostramos el valor actual del reloj de Lamport
+        s+= " - Reloj: " + getReloj();
         return s;
     }
 
 
-    public boolean sendMessage(Message m){
+    public boolean sendMessage(Message m, int reloj){
+    	//Actualizamos el reloj
+        setReloj(reloj + 1);
+        setMarcaTemporal(reloj);
+
         this.setFillColor(COLOR_SEND);
         boolean status = transport.put(m);
         this.setFillColor(COLOR_DEFAULT);
@@ -116,7 +163,6 @@ public class CDNode extends JLabel implements Runnable{
         this.setFillColor(COLOR_DEFAULT);
         return m;
     }
-
 
     public void stop(){
         this.activo = false;
