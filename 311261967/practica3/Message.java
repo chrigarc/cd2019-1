@@ -12,7 +12,7 @@ public class Message{
     private String source;
     private String destination;
     private Serializable content;
-    private Object recorrido;
+    private LinkedList<String> recorrido;
 
     public Message(String source, String destination, Serializable content){
         this.source = source;
@@ -20,6 +20,8 @@ public class Message{
         this.content = content;
         this.ttl = TTL_DEFAULT;
         this.recorrido = new LinkedList<String>();
+	this.recorrido.add(source);
+	this.recorrido.add(destination);
     }
 
     public int getTTL(){
@@ -38,7 +40,7 @@ public class Message{
         return content;
     }
 
-    public Object getRecorrido(){
+    public LinkedList<String> getRecorrido(){
         return this.recorrido;
     }
 
@@ -48,6 +50,7 @@ public class Message{
 
     public void setDestination(String destination){
         this.destination = destination;
+	this.recorrido.add(destination);
     }
 
     public void setSource(String source){
@@ -61,6 +64,15 @@ public class Message{
     public Message clone(){
         Message m  = new Message(source, destination, content);
         m.ttl = this.ttl;
+	m.recorrido = (LinkedList<String>)this.recorrido.clone();
         return m;
     }
+
+    public boolean equals(Object o){
+	if(o instanceof Message){
+	    Message temp = (Message)o;
+	    return this.recorrido.toString().equals(temp.recorrido.toString());
+	}
+	return false;
+    } 
 }

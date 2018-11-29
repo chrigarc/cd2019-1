@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.LinkedList;
+
 public class Transport{
 
     public final static int LIMIT_CAPACITY = 500;
@@ -54,3 +55,4 @@ public class Transport{
         }
     }
 }
+

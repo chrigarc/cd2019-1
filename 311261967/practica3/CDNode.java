@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class CDNode extends JLabel implements Runnable{
 
     public enum Type{
-        SOURCE, DESTINATION;
+        SOURCE, DESTINATION, NORMAL;
     }
 
     public static final String COLOR_DEFAULT = "blue";
@@ -24,6 +24,8 @@ public class CDNode extends JLabel implements Runnable{
     private Transport transport;
     private CDGraph graph;
     private CDNode.Type type;
+    LinkedList<Message> recibido;
+    LinkedList<Message> logrados;
 
 
     public CDNode(CDGraph g,Node n){
@@ -33,12 +35,23 @@ public class CDNode extends JLabel implements Runnable{
         transport = Transport.getInstance();
         this.graph = g;
         this.setFillColor(COLOR_DEFAULT);
-    
+	this.recibido = new LinkedList<Message>();
     }
 
     public CDNode(CDGraph g,Node n, CDNode.Type type){
         this(g, n);
         this.type = type;
+	if(type == CDNode.Type.DESTINATION){
+	    this.logrados = new LinkedList<Message>();
+	}
+    }
+
+    public LinkedList<Message> getLogrados(){
+	return this.logrados;
+    }
+
+    public LinkedList<Message> getMensajes(){
+	return recibido;
     }
 
     public Node getNode(){
@@ -58,9 +71,9 @@ public class CDNode extends JLabel implements Runnable{
 
             Message m = readMessage();
             if(m!=null){
-                recibidos.add(m);
+                recibido.add(m);
                 if(type != null && type == CDNode.Type.DESTINATION){
-                    // TODO
+                    logrados.add(m);
                 }else{
                     Iterator<Node> nNeigh = node.getNeighborNodeIterator();
                     while(nNeigh.hasNext()) {
@@ -83,8 +96,8 @@ public class CDNode extends JLabel implements Runnable{
         if(node!=null){
             s+="ID: " + node.getId();
         }
-        if(recibidos != null && !recibidos.isEmpty()){
-            s+=", ultimo mensaje recibido de: " + recibidos.getLast().getSource();
+        if(recibido != null && !recibido.isEmpty()){
+            s+=", ultimo mensaje recibido de: " + recibido.getLast().getSource();
         }
         return s;
     }

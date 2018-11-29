@@ -1,7 +1,9 @@
-import org.graphstream.graph.Graph;
+import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.SingleGraph;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import org.graphstream.graph.Node;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import javax.swing.JFrame;
@@ -25,6 +27,7 @@ public class CDGraph extends Thread{
     private JFrame frame;
     private String source;
     private String destination;
+    private CDNode destino;
 
     public CDGraph(Graph g){
         this.graph = g;
@@ -135,7 +138,7 @@ public class CDGraph extends Thread{
         }catch(Exception ex){
         }
     }
-
+    
     public void stopAll(){
         Iterator<CDNode> iterator = nodes.iterator();
         while(iterator.hasNext()){
@@ -146,21 +149,59 @@ public class CDGraph extends Thread{
             System.out.println("Finalizando cambios en la grafica espere...");
             sleep(1000);
         }
+	try{
         renderComputacionesEquivalentes();
+	}catch(Exception ex){
+	    System.out.println("Algo salio mal");
+	}
     }
 
     private void stopAction(){
         this.stopAll();
     }
 
-    /**
+    /*
     *  Termina el metedo para localizar todas las computaciones equivalentes
     *  Las computaciones equivalentes que tienen que encontrar de ley son [A, B, E, F, D] y [A, E, B, F, D]
     */
     private void renderComputacionesEquivalentes(){
-        Graph equivalentes = null;
-        if(equivalentes != null){
+	Graph equivalentes = new SingleGraph("Equivalentes");
+	LinkedList<Message> logrados = destino.getLogrados();
+	LinkedList<Message> equiv = new LinkedList<Message>();
+
+	for(Message mensaje : logrados){
+	    if(esEquiv(mensaje, logrados) && !equiv.contains(mensaje)){
+		equiv.add(mensaje);
+	    }
+	}
+	if(equivalentes != null){
+            int indg = 0;
+            int indn = 0;
+            for(Message mensaje : logrados){
+                Node anterior = null;
+                for(String str : mensaje.getRecorrido()){ 
+                    Node actual = equivalentes.addNode("G" + indg + "N" + indn + "_" + str);
+                    actual.addAttribute("ui.label", actual.getId());
+                    if(anterior != null){
+                        equivalentes.addEdge("G" + indg + anterior + str, anterior.getId(), actual.getId());
+                    }
+                    anterior = actual;
+                    indn++;
+                }
+                indg++;
+	    }
             equivalentes.display();
         }
     }
+
+    private boolean esEquiv(Message mensaje, LinkedList<Message> lista){
+        Set<String> recorrido = new HashSet<String>(mensaje.getRecorrido());
+        for(Message mensajeActual: lista){
+            Set<String> recorridoActual = new HashSet<String>(mensajeActual.getRecorrido());
+            if(!recorrido.equals(recorridoActual))
+                return false;
+        }
+        return true;
+    }
 }
+
