@@ -1,7 +1,9 @@
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import org.graphstream.graph.Node;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import javax.swing.JFrame;
@@ -10,13 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.View;
-import org.graphstream.graph.implementations.SingleGraph;//agregamos la dependecia para crear las computaciones equivalentes
-import java.util.LinkedList;
-import java.awt.Color;
 
 
 public class CDGraph extends Thread{
@@ -28,7 +28,7 @@ public class CDGraph extends Thread{
     private JFrame frame;
     private String source;
     private String destination;
-    private CDNode general;//agregamos un CDNode con el que trabajaremos para optener las computaciones equivalentes
+    private CDNode comp; 
 
     public CDGraph(Graph g){
         this.graph = g;
@@ -50,12 +50,11 @@ public class CDGraph extends Thread{
         for( Node i : graph.getEachNode() ){
             i.addAttribute("ui.label", i.getId());
             CDNode cdn = null;
-            //cambio entre las lineas 52 y 53
                 cdn = new CDNode(this, i, CDNode.Type.SOURCE);
             if(i.getId().equals(source)){
             }else if(i.getId().equals(destination)){
                 cdn = new CDNode(this, i, CDNode.Type.DESTINATION);
-                general = cdn;//Cada uno nodo sea el mismo que el valor destion actaulizamos el CDNode general. 
+                comp = cdn; 
             }else{
                 cdn = new CDNode(this, i);
             }
@@ -165,56 +164,41 @@ public class CDGraph extends Thread{
     */
     private void renderComputacionesEquivalentes(){
 
-        Graph equivalentes = new SingleGraph("Computaciones Equivalentes");
-        LinkedList<Message> completados = general.getRecibidoDestinatario();
-        LinkedList<Message> compEquivalentes = new LinkedList<Message>();
-        //Para cada mensaje que llego a su destino 
-        for(Message mensaje: completados){
+        Graph equivalentes = new SingleGraph("Equivalentes");
+        LinkedList<Message> logrados = comp.getLogrados();
+        LinkedList<Message> equiv = new LinkedList<Message>();
+        for(Message mensaje: logrados){
             Set<String> recorrido = new HashSet<String>(mensaje.getRecorrido());
-
-            //comparamos un cada mensaje con los demás que han sido completados.
-            for(Message comparar: completados){
+            for(Message comparar: logrados){
                 Set<String> recorridoComparar = new HashSet<String>(comparar.getRecorrido());
-                //Si hay dos recorridos iguales y la computacion del mensaje no esta en la lista
-                if(!recorrido.equals(recorridoComparar) && !compEquivalentes.contains(mensaje))
-                    compEquivalentes.add(mensaje);//agregamos el mensaje a la lista para graficar.
+                if(!recorrido.equals(recorridoComparar) && !equiv.contains(mensaje))
+                    equiv.add(mensaje);
                 }
         }
 
-
-        //Hacemos la configuración de la gráfica a desplegar
         if(equivalentes != null){
-
-            int noComputacion = 0;
-            int iNodo = 0;
-            //para cada mensaje que generó una computación equivalente
-            for(Message mensaje: compEquivalentes){
+            int noComp = 0;
+            int indN = 0;
+            for(Message mensaje: equiv){
 
                 Node anterior = null;
                 Node actual = null;
-                //Agregamos el nodo del recorrido de la computación y su arista que lo conecta con su nodo anterior.
-                for(String s: mensaje.getRecorrido()){
-
-                    this.graph.getNode(s).addAttribute("ui.class", "equivalente");//le ponemos una clase a los nodos de la gráfica para distinguirlos.
-                    actual = equivalentes.addNode(noComputacion+""+iNodo+""+s);//agregamos cada nodo del recorrido
-                    actual.addAttribute("ui.label",actual.getId());//le ponemos su etiqueta
-
-                    //Cuando tengamos dos nodos consecutivos del recorrido agregamos su arista
+                for(String str: mensaje.getRecorrido()){
+                    this.graph.getNode(str).addAttribute("ui.class", "equivalente");
+                    actual = equivalentes.addNode(noComp + " " + indN + " " + str);
+                    actual.addAttribute("ui.label",actual.getId());
                     if(anterior != null){
-                        //agregamos la arista entre los dos nodos consecutivos
-                        equivalentes.addEdge(anterior.getId()+""+actual.getId()+""+noComputacion, anterior.getId(), actual.getId());
+                        equivalentes.addEdge(anterior.getId() + " " + actual.getId() + " " + noComp, anterior.getId(), actual.getId());
                     }
                     anterior = actual;
-                    ++iNodo;
+                    ++indN;
                 }
-                noComputacion++;
+                noComp++;
             }
-            equivalentes.display();//desplegamos la gráfica
-            equivalentes.addAttribute("ui.stylesheet", "node { fill-color: orange; }");//Agregamos un color a los nodos
-            this.graph.addAttribute("ui.stylesheet", "node.equivalente { fill-color: red; }");//Cambiamos de color para los nodos que forman parte de una computación equivalente
+            equivalentes.display();
+            equivalentes.addAttribute("ui.stylesheet", "node { fill-color: pink; }");
+            this.graph.addAttribute("ui.stylesheet", "node.equivalente { fill-color: green; }");
         }
     }
-
-
 }
 

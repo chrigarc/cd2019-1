@@ -20,8 +20,8 @@ public class Message{
         this.content = content;
         this.ttl = TTL_DEFAULT;
         this.recorrido = new LinkedList<String>();
-        this.recorrido.add(source);//Nodo inicial del recorrido.
-        this.recorrido.add(destination); //Nodo final del recorrido
+        this.recorrido.add(source); //Inicia recorrido.
+        this.recorrido.add(destination); //Fin recorrido
     }
 
     public int getTTL(){

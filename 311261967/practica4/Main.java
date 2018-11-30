@@ -6,10 +6,9 @@ import org.graphstream.algorithm.generator.Generator;
 
 public class Main{
 
-
     public static void main(String[] pps){
 
-        SingleGraph graph = new SingleGraph("Práctica 3");
+        SingleGraph graph = new SingleGraph("Práctica 4");
         graph.addAttribute("ui.stylesheet", "node.red { fill-color: red; } node.blue { fill-color: blue; } node.green { fill-color: green; }");
         graph.addNode("A");
         graph.addNode("B");

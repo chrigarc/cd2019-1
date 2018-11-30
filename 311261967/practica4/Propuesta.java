@@ -7,16 +7,18 @@ import org.graphstream.algorithm.generator.Generator;
 public class Propuesta{
 
 
-    public static void main(String[] pps){
-
-        SingleGraph graph = new SingleGraph("Propuesta Práctica 4");
-        graph.addAttribute("ui.stylesheet", "node{ fill-color: purple; }");
+    public static void propuesta(){
+        SingleGraph graph = new SingleGraph("Propuesta");
+        graph.addAttribute("ui.stylesheet", "node{ fill-color: pink; }");
         graph.addNode("A");
         graph.addNode("B");
 
         graph.addEdge("AB", "A", "B");
 
-        graph.display();
+	CDGraph cdg = new CDGraph(graph);
+        cdg.setSource("A");
+        cdg.setDestination("D");
+        cdg.start();
     }
 
 }

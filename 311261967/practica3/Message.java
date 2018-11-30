@@ -4,6 +4,8 @@ import java.util.LinkedList;
 /*
 La clase es una estructura de datos con un tiempo de vida 100, que conoce el id del destino y el origen
 */
+
+@SuppressWarnings("unchecked")
 public class Message{
 
     public final static int TTL_DEFAULT = 100;
@@ -20,8 +22,8 @@ public class Message{
         this.content = content;
         this.ttl = TTL_DEFAULT;
         this.recorrido = new LinkedList<String>();
-	this.recorrido.add(source);
-	this.recorrido.add(destination);
+	this.recorrido.add(source); //Inicia recorrido
+	this.recorrido.add(destination); //Fin recorrido
     }
 
     public int getTTL(){
