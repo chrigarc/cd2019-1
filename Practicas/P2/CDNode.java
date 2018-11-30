@@ -26,6 +26,9 @@ public class CDNode extends JLabel implements Runnable{
     }
 
     public void run(){	
+    	while(activo!=false){
+    		
+    	}
 System.out.println("¿Qué necesitas que haga para que un nodo genere un mensaje en cada iteración y lo mande a todos sus vecinos, y despues lea un mensaje de y lo reenvie a todos sus vecinos siempre y cuando su tiempo de vida, del mensaje, lo permita?");
     }
 

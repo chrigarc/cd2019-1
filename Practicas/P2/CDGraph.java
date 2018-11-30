@@ -23,7 +23,7 @@ public class CDGraph implements Runnable{
     private ConcurrentLinkedDeque<String[]> list;
     private boolean active;
     private JFrame frame;
-    
+
     public CDGraph(Graph g){
 	this.graph = g;
 	this.nodes = new HashSet<CDNode>();
@@ -46,7 +46,7 @@ public class CDGraph implements Runnable{
 		graph.getNode(tmp[0]).setAttribute("ui.class",  tmp[1]);
 	    }
 	    sleep(100);
-	}       
+	}
     }
 
     public void addChangeColor(String nodeId, String color){
@@ -98,7 +98,7 @@ public class CDGraph implements Runnable{
 		}
 	});
 	jPanel1.add(button);
-	
+
 	Iterator<CDNode> iterator = nodes.iterator();
 	int y = 30;
 	while(iterator.hasNext()){
@@ -111,19 +111,19 @@ public class CDGraph implements Runnable{
 	frame.setVisible(true);
 
     }
-    
+
     private void sleep(int ms){
 	try{
 	    Thread.sleep(ms);
 	}catch(Exception ex){
-	}	   
+	}
     }
-    
+
     public void stop(){
 	active = false;
 	Iterator<CDNode> iterator = nodes.iterator();
 	while(iterator.hasNext()){
-	    iterator.next().stop();	    
+	    iterator.next().stop();
 	}
     }
 
