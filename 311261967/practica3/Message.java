@@ -52,12 +52,14 @@ public class Message{
 
     public void setDestination(String destination){
         this.destination = destination;
-	this.recorrido.add(destination);
+	
     }
 
     public void setSource(String source){
         this.source = source;
     }
+	
+	
 
     public String toString(){
         return "{source: "+ source+", destination: "+destination+", ttl: "+ttl+"}";
@@ -70,11 +72,4 @@ public class Message{
         return m;
     }
 
-    public boolean equals(Object o){
-	if(o instanceof Message){
-	    Message temp = (Message)o;
-	    return this.recorrido.toString().equals(temp.recorrido.toString());
-	}
-	return false;
-    } 
 }
