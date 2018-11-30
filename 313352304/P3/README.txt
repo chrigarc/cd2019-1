@@ -15,10 +15,10 @@ Facultad de Ciencias
 Instrucciones:
 
 -)  Compilar con:
-      javac -cp lib/gs-core-1.3/gs-core-1.3.jar:lib/gs-algo-1.3/gs-algo-1.3.jar:. Practica1.java 
+      javac -cp lib/gs-core-1.3/gs-core-1.3.jar:lib/gs-algo-1.3/gs-algo-1.3.jar:. Main.java 
 
 
 -)  Correr con:
- java -cp lib/gs-core-1.3/gs-core-1.3.jar:lib/gs-algo-1.3/gs-algo-1.3.jar:. Practica1
+ java -cp lib/gs-core-1.3/gs-core-1.3.jar:lib/gs-algo-1.3/gs-algo-1.3.jar:. Main
 
       
