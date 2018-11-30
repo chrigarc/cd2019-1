@@ -26,7 +26,7 @@ public class P2P implements Runnable{
     while(true){
         try{
             DatagramSocket socket = new DatagramSocket();
-	    String usoDato = "314091057";
+	    String usoDato = "311261967";
             byte[] datoBytes = usoDato.getBytes();
              
             DatagramPacket dato = new DatagramPacket(datoBytes, datoBytes.length, InetAddress.getByName(HOST_SERVIDOR),
