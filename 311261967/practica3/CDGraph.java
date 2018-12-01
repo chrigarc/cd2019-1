@@ -1,4 +1,4 @@
-import org.graphstream.graph.*;
+import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import java.util.Set;
 import java.util.HashSet;
@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import org.graphstream.ui.view.Viewer;
@@ -27,7 +28,7 @@ public class CDGraph extends Thread{
     private JFrame frame;
     private String source;
     private String destination;
-    private CDNode destino;
+    private CDNode general;
 
     public CDGraph(Graph g){
         this.graph = g;
@@ -50,9 +51,10 @@ public class CDGraph extends Thread{
             i.addAttribute("ui.label", i.getId());
             CDNode cdn = null;
                 cdn = new CDNode(this, i, CDNode.Type.SOURCE);
-                if(i.getId().equals(source)){
+            if(i.getId().equals(source)){
             }else if(i.getId().equals(destination)){
                 cdn = new CDNode(this, i, CDNode.Type.DESTINATION);
+                general = cdn; 
             }else{
                 cdn = new CDNode(this, i);
             }
@@ -138,7 +140,7 @@ public class CDGraph extends Thread{
         }catch(Exception ex){
         }
     }
-    
+
     public void stopAll(){
         Iterator<CDNode> iterator = nodes.iterator();
         while(iterator.hasNext()){
@@ -149,58 +151,58 @@ public class CDGraph extends Thread{
             System.out.println("Finalizando cambios en la grafica espere...");
             sleep(1000);
         }
-	try{
         renderComputacionesEquivalentes();
-	}catch(Exception ex){
-	    System.out.println("Algo salio mal");
-	}
     }
 
     private void stopAction(){
         this.stopAll();
     }
 
-    /*
+    /**
     *  Termina el metedo para localizar todas las computaciones equivalentes
     *  Las computaciones equivalentes que tienen que encontrar de ley son [A, B, E, F, D] y [A, E, B, F, D]
     */
     private void renderComputacionesEquivalentes(){
-	Graph equivalentes = new SingleGraph("Equivalentes");
-	LinkedList<Message> logrados = destino.getLogrados();
-	LinkedList<Message> equiv = new LinkedList<Message>();
+	/*
+	  Mandamos mensaje a los vecinos y se verifca que lleguen a su destino, después se comparan
+	  recorridos y si con iguales se agregan a la lista para graficar
+	 */
+        Graph equivalentes = new SingleGraph("Computaciones Equivalentes");
+        LinkedList<Message> completados = general.getRecibidoDestinatario();
+        LinkedList<Message> compEquivalentes = new LinkedList<Message>();
+        for(Message mensaje: completados){
+            Set<String> recorrido = new HashSet<String>(mensaje.getRecorrido());
+            for(Message comparar: completados){
+                Set<String> recorridoComparar = new HashSet<String>(comparar.getRecorrido());
+                if(!recorrido.equals(recorridoComparar) && !compEquivalentes.contains(mensaje))
+                    compEquivalentes.add(mensaje);
+                }
+        }
 
-	for(Message mensaje : logrados){
-	    if(esEquiv(mensaje, logrados) && !equiv.contains(mensaje)){
-		equiv.add(mensaje);
-	    }
-	}
-	if(equivalentes != null){
-            int indg = 0;
-            int indn = 0;
-            for(Message mensaje : logrados){
+        if(equivalentes != null){
+            int noComputacion = 0;
+            int iNodo = 0;
+            for(Message mensaje: compEquivalentes){
+
                 Node anterior = null;
-                for(String str : mensaje.getRecorrido()){ 
-                    Node actual = equivalentes.addNode("G" + indg + "N" + indn + "_" + str);
-                    actual.addAttribute("ui.label", actual.getId());
+                Node actual = null;
+                for(String s: mensaje.getRecorrido()){
+                    this.graph.getNode(s).addAttribute("ui.class", "equivalente");
+                    actual = equivalentes.addNode(noComputacion+""+iNodo+""+s);
+                    actual.addAttribute("ui.label",actual.getId());
                     if(anterior != null){
-                        equivalentes.addEdge("G" + indg + anterior + str, anterior.getId(), actual.getId());
+                        equivalentes.addEdge(anterior.getId()+""+actual.getId()+""+noComputacion, anterior.getId(), actual.getId());
                     }
                     anterior = actual;
-                    indn++;
+                    ++iNodo;
                 }
-                indg++;
-	    }
+                noComputacion++;
+            }
             equivalentes.display();
+            equivalentes.addAttribute("ui.stylesheet", "node { fill-color: pink; }");
+            this.graph.addAttribute("ui.stylesheet", "node.equivalente { fill-color: green; }");
         }
     }
 
-    private boolean esEquiv(Message mensaje, LinkedList<Message> lista){
-        Set<String> recorrido = new HashSet<String>(mensaje.getRecorrido());
-        for(Message mensajeActual: lista){
-            Set<String> recorridoActual = new HashSet<String>(mensajeActual.getRecorrido());
-            if(!recorrido.equals(recorridoActual))
-                return false;
-        }
-        return true;
-    }
 }
+
