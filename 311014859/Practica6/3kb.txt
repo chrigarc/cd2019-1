@@ -1,0 +1,40 @@
+Supplementary material Miyazawa_et_al_readme.txt
+
+Journal: Cognition
+Authors: Miyazawa, Kouki; Shinya, Takahito; Martin, Andrew; Kikuchi, Hideaki; Mazuka, Reiko
+Title: Vowels in Infant-directed Speech: More Breathy and More Variable, but Not Clearer
+
+filename:Miyazawa_et_al_data.csv
+========================================
+This comma-separated text file contains all of the data used in the analyses presented in the paper. For further details on the construction of the infant-directed speech corpus which was the source of the data, see the following paper:
+
+Mazuka, R., Igarashi, Y., & Nishikawa, K. (2006). Input for learning Japanese: RIKEN
+mother-infant conversation corpus. IEIC Technical Report, 106(165), 11-15.
+
+Each line of the text file represents a single vowel token. Each line consists of 15 comma-separated columns, which contain the following information:
+
+Column  1: Speaker identifier. Each of the 20 speakers is represented by a unique number between 1 and 20.
+Column  2: Register. Infant-directed speech is encoded as "IDS", adult-directed speech as "ADS", and carefully read speech as "CS".
+Column  3: Vowel. Japanese five short monophthongs /i/, /e/, /o/, /a/, and /u/.
+Column  4: Word. Each word type is represented by a unique number between 1 and 2,801. See note below regarding the reason words are encoded numerically.
+Column  5: Phrase boundary. The word's position with respect to various prosodic phrases. The following codes are used:
+	"0": The word does not occur at the end of any prosodic phrase.
+	"1": The word occurs at the end of a phrase boundary (accentual or intonational).
+Column  6: Pitch accent. Unaccented vowel is encoded as "0", and accented vowels as "1".
+Column  7: Duration. Vowel duration for each vowel, in seconds.
+Column  8: CPP. The cepstral peak prominence values for each vowel.
+Column  9: H1-H2. The difference of the amplitudes of the second harmonic and the first harmonic for each vowel.
+Column 10: F1. First formant values for each vowel.
+Column 11: F2. Second formant values for each vowel.
+Column 12: Within-vowel variability of F1. This is calculated as the amount of change in F1 within each single vowel.
+Column 13: Within-vowel variability of F2. This is calculated as the amount of change in F2 within each single vowel.
+Column 14: F0. The fundamental frequency values for each vowel.
+Column 15: dMFCC. The delta Mel Frequency Cepstral Coefficient for each vowel.
+
+Note that according to the terms agreed upon by the experimental participants, we are not able to make public the contents of the corpus (i.e., the actual words spoken by the participants). Due to this restriction, we have replaced each word type in the corpus with a unique numeric code. Multiple tokens of the same word type all receive the same code. This allow other researchers to replicate our statistical tests (including the random effects of word) while protecting the privacy of the participants.
+
+Please direct any questions regarding these materials to the corresponding author:
+
+Kouki Miyazawa
+Researcher, Laboratory for Language Development, RIKEN BSI
+kouki.miyazawa@riken.jp
