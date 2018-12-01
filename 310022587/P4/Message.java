@@ -1,74 +1,64 @@
-import java.io.Serializable;
-import java.util.LinkedList;
-
-/*
-La clase es una estructura de datos con un tiempo de vida 100, que conoce el id del destino y el origen
-*/
 public class Message{
-
-    public final static int TTL_DEFAULT = 100;
-
-    private int ttl;
-    private String source;
-    private String destination;
-    private Serializable content;
-    private LinkedList<String> recorrido;
-
-    public Message(String source, String destination, Serializable content){
-        this.source = source;
-        this.destination = destination;
-        this.content = content;
-        this.ttl = TTL_DEFAULT;
-        this.recorrido = new LinkedList<String>();
-        this.recorrido.add(source);//Nodo inicial del recorrido.
-        this.recorrido.add(destination); //Nodo final del recorrido
+     private String source;
+    private int time;
+    private int pasos;
+    private String end;
+    private String recorrido;
+     public Message(String source){
+      this.source = source;
+      this.time = 100;
+      this.pasos = 0;
+      this.end = "";
+      this.recorrido = "Start: " + source;
     }
-
-    public int getTTL(){
-        return ttl;
+     public String getSource()
+    {
+      return this.source;
     }
-
-    public String getSource(){
-        return source;
+     public void setSource(String source)
+    {
+      this.source = source;
     }
-
-    public String getDestination(){
-        return destination;
+     public int getTime()
+    {
+      return this.time;
     }
-
-    public Serializable getContent(){
-        return content;
+     public void setTime(int time)
+    {
+      this.time = time;
     }
-
-    
-    public LinkedList<String> getRecorrido(){
-        return this.recorrido;
+     public int getPasos()
+    {
+      return this.pasos;
     }
-
-    
-    public void setRecorrido(LinkedList<String> recorrido){
-        this.recorrido = recorrido;
+     public void setPasos(int pasos)
+    {
+      this.pasos = pasos;
     }
-
-    public void setTTL(int ttl){
-        this.ttl = ttl;
+     public String getEnd()
+    {
+      return this.end;
     }
-
-    public void setDestination(String destination){
-        this.destination = destination;
+     public void setEnd(String end)
+    {
+      this.end = end;
     }
-
-    public void setSource(String source){
-        this.source = source;
+     public String getRecorrido()
+    {
+      return this.recorrido;
     }
-
-    public String toString(){
-        return "{source: "+ source+", destination: "+destination+", ttl: "+ttl+"}";
+     public void setRecorrido(String recorrido)
+    {
+      this.recorrido = recorrido;
     }
-
-    public Message clone(){
-        Message m  = new Message(source, destination, content);
-        m.ttl = this.ttl;
-        return m;
+     @Override
+    public String toString()
+    {
+      String s = "Info mensaje:\n" +
+                 "Origen: " + this.getSource() + "\n" +
+                 "Final: " + this.getEnd() + "\n" +
+                 "Pasos: " + this.getPasos() + "\n" +
+                 "Recorrido: " + this.getRecorrido() + "\n\n";
+      return s;
     }
-}
+ } 
