@@ -1,4 +1,8 @@
 import org.graphstream.graph.Graph;
+<<<<<<< HEAD
+import org.graphstream.graph.implementations.SingleGraph;
+=======
+>>>>>>> 34fab885680352eba3d64b7f11e9c78bb0eec1c9
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,8 +18,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.View;
+<<<<<<< HEAD
+import java.util.LinkedList;
+
+
+=======
 import org.graphstream.graph.implementations.SingleGraph;
 import java.awt.Color;
+>>>>>>> 34fab885680352eba3d64b7f11e9c78bb0eec1c9
 
 
 public class CDGraph extends Thread{
@@ -27,7 +37,11 @@ public class CDGraph extends Thread{
     private JFrame frame;
     private String source;
     private String destination;
+<<<<<<< HEAD
+    private CDNode nodeDestination;
+=======
     private CDNode eq;
+>>>>>>> 34fab885680352eba3d64b7f11e9c78bb0eec1c9
 
     public CDGraph(Graph g){
         this.graph = g;
@@ -49,11 +63,18 @@ public class CDGraph extends Thread{
         for( Node i : graph.getEachNode() ){
             i.addAttribute("ui.label", i.getId());
             CDNode cdn = null;
+<<<<<<< HEAD
+                cdn = new CDNode(this, i, CDNode.Type.SOURCE);
+                if(i.getId().equals(source)){
+            }else if(i.getId().equals(destination)){
+                cdn = new CDNode(this, i, CDNode.Type.DESTINATION);
+=======
                  cdn = new CDNode(this, i, CDNode.Type.SOURCE);
             if(i.getId().equals(source)){
             }else if(i.getId().equals(destination)){
                 cdn = new CDNode(this, i, CDNode.Type.DESTINATION);
                 eq = cdn;
+>>>>>>> 34fab885680352eba3d64b7f11e9c78bb0eec1c9
             }else{
                 cdn = new CDNode(this, i);
             }
@@ -77,7 +98,11 @@ public class CDGraph extends Thread{
     private void createFrame(){
         frame = new JFrame("Práctica 3");
         frame.setSize(800, 800);
+<<<<<<< HEAD
+        frame.setLocationRelativeTo(null);                       // centramos la ventana en la pantalla
+=======
         frame.setLocationRelativeTo(null);                     
+>>>>>>> 34fab885680352eba3d64b7f11e9c78bb0eec1c9
 
         javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
         JPanel jPanel1 = new JPanel();
@@ -162,6 +187,61 @@ public class CDGraph extends Thread{
     *  Las computaciones equivalentes que tienen que encontrar de ley son [A, B, E, F, D] y [A, E, B, F, D]
     */
     private void renderComputacionesEquivalentes(){
+<<<<<<< HEAD
+        Graph equivalentes = new SingleGraph("equivalentes");
+        LinkedList<Message> exitosos = nodeDestination.getExitosos();
+        LinkedList<Message> l = new LinkedList<Message>();
+        for(Message i:exitosos){
+            if(isEquivalente(i, exitosos) && !l.contains(i)){
+                l.add(i);
+            }
+        }
+        if(equivalentes != null){
+            int index_g = 0;
+            int index = 0;
+            for(Message i:l){
+
+                Node anterior = null;
+                for(String j:i.getRecorrido()){
+                    Node n = equivalentes.addNode(index + "__G" + index_g + "_N_" + j);
+                    n.addAttribute("ui.label",n.getId());
+                    if(anterior != null){
+                        equivalentes.addEdge("G" + index_g + "_E" + anterior + j, anterior.getId(), n.getId());
+                    }
+                    anterior = n;
+                    index++;
+                }
+                index_g++;
+            }
+            equivalentes.display();
+        }
+    }
+
+    private boolean isEquivalente(Message m, LinkedList<Message> l){
+        boolean status = false;
+        for(Message i:l){
+            if(!m.equals(i) && m.getRecorrido().size() == i.getRecorrido().size()){
+                boolean tmp = true;
+                for(String j:m.getRecorrido()){
+                    if(!i.getRecorrido().contains(j)){
+                        tmp = false;
+                    }
+                }
+                boolean tmp2 = true;
+                for(String j:i.getRecorrido()){
+                    if(!m.getRecorrido().contains(j)){
+                        tmp2 = false;
+                    }
+                }
+                if(tmp && tmp2){
+                    status = tmp;
+                }
+            }
+        }
+        return status;
+	}
+}
+=======
 
         Graph equivalentes = new SingleGraph("CompuEquivalentes");
         LinkedList<Message> completados = eq.getRecibidoDestino();
@@ -209,3 +289,4 @@ public class CDGraph extends Thread{
 
 
 }
+>>>>>>> 34fab885680352eba3d64b7f11e9c78bb0eec1c9
