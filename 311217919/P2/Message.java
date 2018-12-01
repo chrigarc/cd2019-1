@@ -38,6 +38,10 @@ public class Message {
       this.tvida = --this.tvida;
     }
 
+    public Message clone(){
+      return new Message(this.recibo, this.envio);
+    }
+
 
 
 }

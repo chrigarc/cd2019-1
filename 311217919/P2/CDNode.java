@@ -26,25 +26,34 @@ public class CDNode extends JLabel implements Runnable{
 
 
     public void run(){
-      System.out.println("¿Qué necesitas que haga para que un nodo genere un mensaje en cada iteración y lo mande a todos sus vecinos, y despues lea un mensaje de y lo reenvie a todos sus vecinos siempre y cuando su tiempo de vida, del mensaje, lo permita?");
-      Iterator<Node> iterador = node.getNeighborNodeIterator();
       while(this.activo){
+        iteraVecinos();
+        sleep(300);
+        Message recibido = readMessage();
+        reenviaMsn(recibido);
+      }
+    }
+
+    public void reenviaMsn(Message recibido){
+      if(recibido != null){
+      //volvemos a sacar los vecinos del nodo para enviar
+      Iterator<Node> vecinos = node.getNeighborNodeIterator();
+      if (recibido != null)
+        while (vecinos.hasNext()) {
+          Node vec = vecinos.next();
+          Message mensajito = recibido.clone();
+          sendMessage(mensajito, vec.getId());
+        }
+      }
+    }
+
+    public void iteraVecinos(){
+      Iterator<Node> iterador = node.getNeighborNodeIterator();
       while(iterador.hasNext()){
-        Node nodovecino = iterator.next();
+        Node nodovecino = iterador.next();
         String s = nodovecino.getId();
         Message m = new Message(nodovecino.getId(), s);
         sendMessage(m, nodovecino.getId());
-      }}
-
-      sleep(300);
-
-      Message recibido = readMessage();
-      if(recibido != null){
-        //volvemos a sacar los vecinos del nodo para enviar
-        Iterator<Node> vecinos = node.getNeighborNodeIterator();
-        while (vecinos.hasNext()) {
-          Node nodovecino = vecinos.next();
-        }
       }
     }
 
