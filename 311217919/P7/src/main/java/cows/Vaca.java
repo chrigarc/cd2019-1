@@ -20,6 +20,7 @@ public class Vaca implements ICow{
         return new Color(255, 230, 0);
     }
 
+  //celda
   class Cell{
     int di,dj;
     Cell(int di, int dj){

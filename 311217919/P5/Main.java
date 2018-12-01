@@ -10,11 +10,7 @@ public class Main{
   public static void main(String[] args) {
     Graph g1 = new SingleGraph("Envio");
 
-
-
-    //Grafica g2 = new Grafica("Recibo");
-
-    Enviamsn msn = new Enviamsn(args[0]);
+    Enviamsn msn = new Enviamsn("localhost");
     int p = msn.getPuerto();
     msn.sendMsn("31121791-9");
 
@@ -25,9 +21,6 @@ public class Main{
     }
     g1.display();
 
-
-    //Recibemsn rmsn = new Recibemsn(p);
-    //rmsn.receiveMsn();
 
   }
 }
