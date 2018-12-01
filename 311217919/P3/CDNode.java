@@ -18,7 +18,7 @@ public class CDNode extends JLabel implements Runnable{
         return s + " -> " + d + " : " + System.nanoTime();
     }
 
-
+    private LinkedList<Node> ruta;
     private Node node;
     private boolean activo;
     private Transport transport;
@@ -33,12 +33,14 @@ public class CDNode extends JLabel implements Runnable{
         transport = Transport.getInstance();
         this.graph = g;
         this.setFillColor(COLOR_DEFAULT);
-    
     }
 
     public CDNode(CDGraph g,Node n, CDNode.Type type){
         this(g, n);
         this.type = type;
+        if(type == CDNode.Type.DESTINATION){
+          this.ruta = new LinkedList<Message>();
+        }
     }
 
     public Node getNode(){
@@ -60,7 +62,8 @@ public class CDNode extends JLabel implements Runnable{
             if(m!=null){
                 recibidos.add(m);
                 if(type != null && type == CDNode.Type.DESTINATION){
-                    // TODO
+
+
                 }else{
                     Iterator<Node> nNeigh = node.getNeighborNodeIterator();
                     while(nNeigh.hasNext()) {

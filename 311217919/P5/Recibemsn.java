@@ -2,16 +2,16 @@ import java.net.*;
 import java.io.*;
 
 public class Recibemsn {
-  public static void main(String[] args) {
-    //si no se especifica el puerto a escuchar lanza error
-    if (args.length != 1)
-      System.out.println("Se necesita el numero de puerto");
-    else {
-      int port = Integer.parseInt(args[0]);
-      //tamaño maximo del msj en bytes
-      final int MAX_LEN = 10;
+    private int port;
+    private final static int MAX_LEN = 10;
+
+    public Recibemsn(int port){
+      this.port = port;
+    }
+
+    public void receiveMsn(){
       try {
-        DatagramSocket  mySocket = new DatagramSocket(port);
+        DatagramSocket  mySocket = new DatagramSocket(this.port);
         // instantiates a datagram socket for receiving the data
         byte[ ] buffer = new byte[MAX_LEN];
         DatagramPacket datagram = new DatagramPacket(buffer, MAX_LEN);
@@ -20,9 +20,7 @@ public class Recibemsn {
         System.out.println(message);
         mySocket.close( );
       }
-      catch (Exception ex) {
-        ex.printStackTrace( );
-      }
-    } // end else
-  } // end main
-} // end class
+      catch (Exception ex) { ex.printStackTrace();}
+    }
+
+  }
