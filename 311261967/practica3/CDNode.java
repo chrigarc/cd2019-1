@@ -4,10 +4,11 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import java.util.LinkedList;
 
+@SuppressWarnings("unchecked")
 public class CDNode extends JLabel implements Runnable{
 
     public enum Type{
-        SOURCE, DESTINATION, NORMAL;
+        SOURCE, DESTINATION;
     }
 
     public static final String COLOR_DEFAULT = "blue";
@@ -24,9 +25,8 @@ public class CDNode extends JLabel implements Runnable{
     private Transport transport;
     private CDGraph graph;
     private CDNode.Type type;
-    LinkedList<Message> recibido;
-    LinkedList<Message> logrados;
-
+    private LinkedList<Message> recibidos; 
+    private LinkedList<Message> recibidoDestinatario; 
 
     public CDNode(CDGraph g,Node n){
         super();
@@ -35,29 +35,23 @@ public class CDNode extends JLabel implements Runnable{
         transport = Transport.getInstance();
         this.graph = g;
         this.setFillColor(COLOR_DEFAULT);
-	this.recibido = new LinkedList<Message>();
+        this.recibidos = new LinkedList<>();
+    
     }
 
     public CDNode(CDGraph g,Node n, CDNode.Type type){
         this(g, n);
         this.type = type;
-	if(type == CDNode.Type.DESTINATION){
-	    this.logrados = new LinkedList<Message>();
-	}
-    }
-
-    public LinkedList<Message> getLogrados(){
-	return this.logrados;
-    }
-
-    public LinkedList<Message> getMensajes(){
-	return recibido;
+        if(type == CDNode.Type.DESTINATION){
+            this.recibidoDestinatario = new LinkedList<Message>();
+        }
     }
 
     public Node getNode(){
         return node;
     }
 
+    /* Mandamos mensajes a todos los vecinos del nodo  */
     public void run(){
         while(this.activo){
             if(type != null && type == CDNode.Type.SOURCE){
@@ -69,18 +63,20 @@ public class CDNode extends JLabel implements Runnable{
                 }
             }
 
-            Message m = readMessage();
+            Message m = this.readMessage();
             if(m!=null){
-                recibido.add(m);
+                recibidos.add(m);
                 if(type != null && type == CDNode.Type.DESTINATION){
-                    logrados.add(m);
+                    recibidoDestinatario.add(m); 
                 }else{
                     Iterator<Node> nNeigh = node.getNeighborNodeIterator();
                     while(nNeigh.hasNext()) {
                         Node n = nNeigh.next();
                         Message reenvio = m.clone();
+                        reenvio.setRecorrido((LinkedList<String>) m.getRecorrido().clone());
                         reenvio.setSource(this.node.getId());
                         reenvio.setDestination(n.getId());
+                        reenvio.getRecorrido().add(n.getId());
                         reenvio.setTTL(m.getTTL()-1);
                         this.sendMessage(reenvio);
                     }
@@ -90,14 +86,18 @@ public class CDNode extends JLabel implements Runnable{
         }
     }
 
+    public LinkedList<Message> getRecibidoDestinatario(){
+        return this.recibidoDestinatario;
+    }
+
 
     public String getText(){
         String s = super.getText();
         if(node!=null){
             s+="ID: " + node.getId();
         }
-        if(recibido != null && !recibido.isEmpty()){
-            s+=", ultimo mensaje recibido de: " + recibido.getLast().getSource();
+        if(recibidos != null && !recibidos.isEmpty()){
+            s+=", ultimo mensaje recibido de: " + recibidos.getLast().getSource();
         }
         return s;
     }
@@ -143,3 +143,4 @@ public class CDNode extends JLabel implements Runnable{
         }
     }
 }
+
