@@ -17,10 +17,8 @@ public class Main2{
     System.out.println("Indique el puerto de llegada:  ");
     n = sc.nextInt();
     Recibemsn rmsn = new Recibemsn(n);
+
     rmsn.receiveMsn();
-
-
-
   }
 
 }

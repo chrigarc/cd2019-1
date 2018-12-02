@@ -19,7 +19,7 @@ public class Recibemsn {
         DatagramPacket datagram = new DatagramPacket(buffer, MAX_LEN);
         mySocket.receive(datagram);
         String message = new String(buffer);
-        setMensaje(message);
+        setMensajes(message);
         mySocket.close( );
       }
       catch (Exception ex) { ex.printStackTrace();}

@@ -5,6 +5,7 @@ import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.algorithm.generator.RandomGenerator;
 import org.graphstream.algorithm.generator.*;
 import org.graphstream.algorithm.Algorithm;
+import java.util.Scanner;
 
 public class Main{
   public static void main(String[] args) {
@@ -20,7 +21,23 @@ public class Main{
         node.addAttribute("ui.label", node.getId());
     }
     g1.display();
-
-
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Indique un mensaje:  ");
+    String s;
+    while(true){
+      s = sc.nextLine();
+      if(s.equals("-")){
+        break;
+      }else{
+        msn.sendMsn(s);
+        g1.addNode(msn.getMensaje());
+        for (Iterator<Node> itr1=g1.iterator(); itr1.hasNext();){
+          Node l = itr1.next();
+          l.addAttribute("ui.label", l.getId());
+        }
+        //for (Node node : g1) {
+        //}
+      }
+    }
   }
 }
