@@ -22,7 +22,7 @@ public class Main{
     }
     g1.display();
     Scanner sc = new Scanner(System.in);
-    System.out.println("Indique un mensaje:  ");
+    System.out.println("Indique un mensaje: ");
     String s;
     while(true){
       s = sc.nextLine();
