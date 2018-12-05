@@ -1,0 +1,25 @@
+Prueba para conectarse a git
+
+Clonamos el repositorio de laboratorio y nos colocamos en este mismo
+luego creamos la rama con:
+
+git checkout -b distribuida
+
+Agregamos el repositorio del ayudante como upstream:
+
+git remote add upstream https://github.com/chrigarc/cd2019-1
+
+Actualizamos el upstream:
+
+git pull upstream master
+
+Creamos todos los archivos que necesitemos y los añadimos:
+
+git add .
+git commit -m "mensaje de cambios"
+git push origin distribuida
+
+Al final hacemos un pull request.
+
+
+
